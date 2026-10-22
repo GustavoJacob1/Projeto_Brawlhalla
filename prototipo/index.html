@@ -1,0 +1,1239 @@
+<!doctype html>
+<html lang="pt-BR">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Brawlhalla DuoFinder</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: app web com barra fixa no topo; cada tela ocupa a página inteira e o conteúdo vive numa coluna de até 1440px com calhas laterais. */
+:root {
+  /* Paleta do projeto: azul noturno, azul competitivo, dourado, cinza claro */
+  --night: #111827;
+  --blue: #2563EB;
+  --gold: #F4B942;
+  --mist: #E5E7EB;
+  /* Derivados */
+  --surface: #FFFFFF;
+  --raised: #F3F4F6;
+  --field: #F9FAFB;
+  --line: #D6DAE1;
+  --line-strong: #AEB6C3;
+  --ink: #111827;
+  --ink-2: #374151;
+  --ink-3: #6B7280;
+  --on-dark: #FFFFFF;
+  --on-dark-2: #D1D5DB;
+  --blue-ink: #1D4ED8;
+  --blue-soft: rgba(37, 99, 235, 0.10);
+  --gold-ink: #A16207;
+  --gold-soft: rgba(244, 185, 66, 0.22);
+  --ok: #15803D;
+  --ok-soft: rgba(22, 163, 74, 0.12);
+  --discord: #5865F2;
+  --bar: #94A3B8;
+  --grid: #E5E7EB;
+  --scrim: rgba(17, 24, 39, 0.6);
+  --t-tin: #6B7280; --t-tin-soft: rgba(107, 114, 128, 0.12);
+  --t-bronze: #B45309; --t-bronze-soft: rgba(180, 83, 9, 0.12);
+  --t-prata: #64748B; --t-prata-soft: rgba(100, 116, 139, 0.12);
+  --t-ouro: #A16207; --t-ouro-soft: rgba(244, 185, 66, 0.25);
+  --t-platina: #0F766E; --t-platina-soft: rgba(15, 118, 110, 0.12);
+  --t-diamante: #4F46E5; --t-diamante-soft: rgba(79, 70, 229, 0.12);
+  /* Tipografia */
+  --display: 'Chakra Petch', 'Rajdhani', 'Segoe UI', system-ui, sans-serif;
+  --body: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  /* Calhas */
+  --gutter-l: max(clamp(16px, 3.4vw, 48px), env(safe-area-inset-left, 0px));
+  --gutter-r: max(clamp(16px, 3.4vw, 48px), env(safe-area-inset-right, 0px));
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { background: var(--mist); }
+body { background: var(--mist); color: var(--ink); font: 400 16px/1.5 var(--body); -webkit-font-smoothing: antialiased; }
+h1, h2, h3, h4 { margin: 0; font-family: var(--display); text-wrap: balance; color: inherit; }
+p { margin: 0; }
+button, input, select, textarea { font: inherit; color: inherit; }
+a { color: inherit; text-decoration: none; }
+:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; border-radius: 6px; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.ic { width: 20px; height: 20px; flex: none; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.ic.sm { width: 16px; height: 16px; }
+.ic.xs { width: 14px; height: 14px; }
+.wrap { max-width: 1440px; margin-inline: auto; padding-left: var(--gutter-l); padding-right: var(--gutter-r); }
+.overline { font: 600 13px/16px var(--display); letter-spacing: .12em; text-transform: uppercase; color: var(--blue); }
+.h1 { font: 700 40px/48px var(--display); letter-spacing: -0.01em; }
+.h2 { font: 700 28px/36px var(--display); }
+.h3 { font: 600 20px/28px var(--display); }
+.lead { font-size: 18px; line-height: 28px; color: var(--ink-2); }
+.muted { color: var(--ink-3); }
+.small { font-size: 14px; line-height: 20px; }
+.label { font: 600 12px/16px var(--body); letter-spacing: .02em; color: var(--ink-3); }
+.num { font-variant-numeric: tabular-nums; }
+
+/* ---------- Botões ---------- */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 18px; border-radius: 10px; border: 1px solid transparent; font: 600 14px/20px var(--body); cursor: pointer; white-space: nowrap; transition: background-color .15s, border-color .15s, transform .1s; }
+.btn:active { transform: translateY(1px); }
+.btn.lg { padding: 14px 24px; border-radius: 12px; font-size: 16px; line-height: 24px; }
+.btn.primary { background: var(--blue); color: #FFFFFF; }
+.btn.primary:hover { background: var(--blue-ink); }
+.btn.gold { background: var(--gold); color: var(--night); }
+.btn.gold:hover { background: #E9A92A; }
+.btn.secondary { background: var(--surface); color: var(--ink); border-color: var(--line-strong); }
+.btn.secondary:hover { background: var(--raised); }
+.btn.ghost { background: transparent; color: var(--ink-2); }
+.btn.ghost:hover { background: var(--raised); }
+.btn.discord { background: var(--discord); color: #FFFFFF; }
+.btn.discord:hover { background: #4752C4; }
+.btn.block { width: 100%; }
+.btn[disabled] { opacity: .55; cursor: not-allowed; transform: none; }
+.link { color: var(--blue); font-weight: 600; cursor: pointer; background: none; border: 0; padding: 0; }
+.link:hover { text-decoration: underline; }
+
+/* ---------- Logo ---------- */
+.logo { display: inline-flex; align-items: center; gap: 12px; }
+.logo .mark { width: 40px; height: 40px; border-radius: 10px; background: var(--gold); color: var(--night); display: grid; place-items: center; }
+.logo .mark .ic { width: 22px; height: 22px; }
+.logo .wm { display: flex; flex-direction: column; line-height: 1; }
+.logo small { font: 600 10px/12px var(--display); letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3); }
+.logo b { font: 700 22px/24px var(--display); color: var(--ink); }
+.logo b em { font-style: normal; color: var(--blue); }
+.logo.on-dark small { color: var(--on-dark-2); }
+.logo.on-dark b { color: var(--on-dark); }
+.logo.on-dark b em { color: var(--gold); }
+
+/* ---------- Barra de navegação ---------- */
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--surface); }
+.topbar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--surface); border-bottom: 1px solid var(--line); }
+.topbar .wrap { display: flex; align-items: center; justify-content: space-between; gap: 24px; min-height: 72px; }
+.nav { display: flex; gap: 4px; }
+.nav a, .nav button { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 8px; font: 600 14px/20px var(--body); color: var(--ink-2); background: none; border: 0; cursor: pointer; white-space: nowrap; }
+.nav a:hover, .nav button:hover { background: var(--raised); }
+.nav a[aria-current="page"] { background: var(--blue-soft); color: var(--blue-ink); }
+.top-actions { display: flex; align-items: center; gap: 8px; }
+.userchip { display: inline-flex; align-items: center; gap: 10px; padding: 5px 14px 5px 5px; border-radius: 999px; border: 1px solid var(--line); background: var(--raised); cursor: pointer; }
+.userchip:hover { border-color: var(--line-strong); }
+.userchip .info { display: flex; flex-direction: column; line-height: 1.2; text-align: left; }
+.userchip .info b { font: 600 14px/18px var(--body); }
+.userchip .info span { font: 600 12px/16px var(--body); color: var(--ink-3); }
+
+/* ---------- Peças ---------- */
+.avatar { --s: 52px; width: var(--s); height: var(--s); border-radius: 50%; flex: none; display: grid; place-items: center; background: var(--gold-soft); border: 2px solid var(--gold); font: 700 calc(var(--s) * .36)/1 var(--display); color: var(--ink); }
+.avatar.sm { --s: 36px; border-width: 2px; }
+.avatar.lg { --s: 104px; border-width: 3px; }
+.tier { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px 3px 8px; border-radius: 999px; font: 600 12px/16px var(--body); color: var(--tc); background: var(--ts); border: 1px solid color-mix(in srgb, var(--tc) 45%, transparent); white-space: nowrap; }
+.tier::before { content: ""; width: 7px; height: 7px; background: var(--tc); transform: rotate(45deg); border-radius: 1px; }
+.tier.tin { --tc: var(--t-tin); --ts: var(--t-tin-soft); }
+.tier.bronze { --tc: var(--t-bronze); --ts: var(--t-bronze-soft); }
+.tier.prata { --tc: var(--t-prata); --ts: var(--t-prata-soft); }
+.tier.ouro { --tc: var(--t-ouro); --ts: var(--t-ouro-soft); }
+.tier.platina { --tc: var(--t-platina); --ts: var(--t-platina-soft); }
+.tier.diamante { --tc: var(--t-diamante); --ts: var(--t-diamante-soft); }
+.ltag { display: inline-flex; align-items: center; gap: 8px; padding: 4px 12px 4px 4px; border-radius: 10px; background: var(--raised); border: 1px solid var(--line); font: 600 12px/16px var(--body); color: var(--ink); white-space: nowrap; }
+.portrait { width: 26px; height: 26px; border-radius: 7px; display: grid; place-items: center; font: 700 13px/1 var(--display); background: var(--pb); color: var(--pc); flex: none; }
+.v0 { --pb: var(--gold-soft); --pc: var(--gold-ink); }
+.v1 { --pb: var(--blue-soft); --pc: var(--blue-ink); }
+.v2 { --pb: var(--ok-soft); --pc: var(--ok); }
+.chip { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--ink-2); font: 600 14px/20px var(--body); cursor: pointer; }
+.chip:hover { border-color: var(--line-strong); }
+.chip .ic { display: none; }
+.chip[aria-pressed="true"] { background: var(--blue-soft); border-color: var(--blue); color: var(--blue-ink); padding-left: 10px; }
+.chip[aria-pressed="true"] .ic { display: block; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 20px; padding: 28px; display: flex; flex-direction: column; gap: 20px; min-width: 0; }
+.pill { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px 5px 10px; border-radius: 999px; font: 600 12px/16px var(--body); }
+.pill.ok { background: var(--ok-soft); color: var(--ok); }
+.pill.gold { background: var(--gold-soft); color: var(--gold-ink); }
+.divider { height: 1px; background: var(--line); border: 0; margin: 0; }
+.switch { width: 44px; height: 24px; border-radius: 999px; border: 0; padding: 3px; background: var(--line-strong); cursor: pointer; flex: none; display: flex; transition: background-color .15s; }
+.switch::after { content: ""; width: 18px; height: 18px; border-radius: 50%; background: #FFFFFF; box-shadow: 0 1px 2px rgba(17, 24, 39, .25); transition: transform .15s; }
+.switch[aria-checked="true"] { background: var(--blue); }
+.switch[aria-checked="true"]::after { transform: translateX(20px); }
+
+/* Campos */
+.field { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.field > label, .field > .flabel { font: 600 14px/20px var(--body); color: var(--ink-2); }
+.control { display: flex; align-items: center; gap: 10px; height: 48px; padding: 0 14px; border-radius: 10px; background: var(--field); border: 1px solid var(--line); color: var(--ink-3); }
+.control:focus-within { border-color: var(--blue); box-shadow: 0 0 0 3px var(--blue-soft); }
+.control input, .control select { flex: 1; min-width: 0; border: 0; background: transparent; outline: none; color: var(--ink); height: 100%; }
+.control select { appearance: none; cursor: pointer; }
+.control input::placeholder { color: var(--ink-3); }
+textarea.area { width: 100%; min-height: 104px; padding: 12px 14px; border-radius: 10px; background: var(--field); border: 1px solid var(--line); resize: vertical; outline: none; }
+textarea.area:focus { border-color: var(--blue); box-shadow: 0 0 0 3px var(--blue-soft); }
+.help { font-size: 13px; line-height: 18px; color: var(--ink-3); }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.check { display: inline-flex; align-items: center; gap: 10px; font-size: 14px; color: var(--ink-2); cursor: pointer; }
+.check input { width: 20px; height: 20px; accent-color: var(--blue); margin: 0; }
+
+/* Telas */
+.screen { display: none; }
+.screen.on { display: block; }
+
+/* ---------- 01 Início ---------- */
+.hero { position: relative; overflow: hidden; background: var(--night); color: var(--on-dark); isolation: isolate; }
+.hero-art, .hero-img, .hero-shade { position: absolute; inset: 0; z-index: -1; }
+.hero-art svg { width: 100%; height: 100%; display: block; }
+.hero-img { background-size: cover; background-position: center; }
+.hero-shade { background: linear-gradient(90deg, rgba(17, 24, 39, .92) 0%, rgba(17, 24, 39, .66) 46%, rgba(17, 24, 39, .18) 100%); }
+.hero .wrap { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, .9fr); gap: 64px; align-items: center; padding-block: 112px 120px; }
+.hero-copy { display: flex; flex-direction: column; gap: 28px; min-width: 0; }
+.eyebrow { align-self: flex-start; display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px 6px 10px; border-radius: 999px; background: rgba(244, 185, 66, .18); color: var(--gold); font: 600 12px/16px var(--body); border: 1px solid rgba(244, 185, 66, .4); }
+.display { font: 700 clamp(40px, 5.2vw, 68px)/1.05 var(--display); letter-spacing: -0.015em; }
+.display em { font-style: normal; color: var(--gold); }
+.hero .lead { color: var(--on-dark-2); max-width: 34rem; }
+.hero-ctas { display: flex; flex-wrap: wrap; gap: 12px; }
+.hero-stats { display: flex; flex-wrap: wrap; gap: 40px; padding-top: 8px; }
+.hero-stats b { display: block; font: 700 28px/34px var(--display); color: var(--on-dark); }
+.hero-stats span { font-size: 14px; color: var(--on-dark-2); }
+.banner-tools { position: absolute; right: var(--gutter-r); bottom: 16px; display: flex; gap: 8px; z-index: 2; }
+.glass { display: inline-flex; align-items: center; gap: 8px; padding: 7px 12px; border-radius: 8px; font: 600 12px/16px var(--body); color: var(--on-dark); background: rgba(17, 24, 39, .55); border: 1px solid rgba(255, 255, 255, .25); cursor: pointer; backdrop-filter: blur(6px); }
+.glass:hover { background: rgba(17, 24, 39, .75); }
+.duo { background: var(--surface); color: var(--ink); border-radius: 24px; padding: 28px; display: flex; flex-direction: column; gap: 20px; box-shadow: 0 24px 64px rgba(0, 0, 0, .35); min-width: 0; }
+.duo-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.duo-pair { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 12px; }
+.duo-player { background: var(--raised); border-radius: 16px; padding: 20px 12px; display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center; min-width: 0; }
+.duo-player .elo { font: 700 24px/28px var(--display); }
+.duo-link { width: 48px; height: 48px; border-radius: 50%; background: var(--blue); color: #FFFFFF; display: grid; place-items: center; font: 700 12px/1 var(--display); letter-spacing: .04em; }
+.meter { display: flex; flex-direction: column; gap: 10px; }
+.meter-top { display: flex; justify-content: space-between; align-items: baseline; }
+.meter-top b { font: 700 20px/24px var(--display); color: var(--ok); }
+.track { height: 8px; border-radius: 4px; background: var(--raised); overflow: hidden; }
+.track i { display: block; height: 100%; border-radius: 4px; background: var(--ok); }
+.how { background: var(--surface); }
+.how .wrap { padding-block: 96px; display: flex; flex-direction: column; gap: 48px; align-items: center; }
+.how-head { display: flex; flex-direction: column; gap: 12px; align-items: center; text-align: center; max-width: 44rem; }
+.steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; width: 100%; }
+.step { background: var(--mist); border-radius: 20px; padding: 28px; display: flex; flex-direction: column; gap: 14px; position: relative; overflow: hidden; }
+.step .ib { width: 48px; height: 48px; border-radius: 12px; display: grid; place-items: center; background: var(--surface); color: var(--blue); }
+.step .n { position: absolute; right: 22px; top: 14px; font: 700 64px/1 var(--display); color: rgba(37, 99, 235, .12); }
+.step p { color: var(--ink-2); }
+.cta-band .wrap { padding-block: 96px; }
+.cta { background: var(--night); color: var(--on-dark); border-radius: 24px; padding: 48px 56px; display: flex; align-items: center; justify-content: space-between; gap: 32px; flex-wrap: wrap; position: relative; overflow: hidden; }
+.cta::after { content: ""; position: absolute; right: -80px; top: -120px; width: 360px; height: 360px; border-radius: 50%; background: radial-gradient(circle, rgba(244, 185, 66, .35), rgba(244, 185, 66, 0) 70%); pointer-events: none; }
+.cta p { color: var(--on-dark-2); }
+.cta > * { position: relative; z-index: 1; }
+footer.site { border-top: 1px solid var(--line); }
+footer.site .wrap { padding-block: 32px 96px; display: flex; flex-direction: column; gap: 16px; }
+footer.site .row { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+/* ---------- 02 Login ---------- */
+.split { display: grid; grid-template-columns: minmax(0, 640px) minmax(0, 1fr); min-height: 100vh; }
+.panel { position: relative; overflow: hidden; background: var(--night); color: var(--on-dark); padding: 56px max(48px, var(--gutter-l)); display: flex; flex-direction: column; justify-content: space-between; gap: 40px; }
+.panel .deco { position: absolute; right: -40px; bottom: -70px; font: 700 300px/1 var(--display); color: rgba(37, 99, 235, .22); pointer-events: none; user-select: none; }
+.panel .msg { display: flex; flex-direction: column; gap: 20px; position: relative; max-width: 480px; }
+.panel .overline { color: var(--gold); }
+.panel p { color: var(--on-dark-2); }
+.panel .preview { max-width: 340px; }
+.panel .foot { color: var(--on-dark-2); font-size: 14px; position: relative; }
+.form-side { display: grid; place-items: center; padding: 48px var(--gutter-r) 96px var(--gutter-l); }
+.form { width: 100%; max-width: 420px; display: flex; flex-direction: column; gap: 22px; }
+.form .between { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.note { display: flex; gap: 10px; padding: 14px; border-radius: 12px; font-size: 14px; line-height: 20px; color: var(--ink-2); }
+.note.gold { background: var(--gold-soft); }
+.note.gold .ic { color: var(--gold-ink); }
+.note.blue { background: var(--blue-soft); }
+.note.blue .ic { color: var(--blue-ink); }
+
+/* ---------- 03 Cadastro ---------- */
+.simplebar { background: var(--surface); border-bottom: 1px solid var(--line); }
+.simplebar .wrap { min-height: 72px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.page-head { display: flex; flex-direction: column; gap: 12px; align-items: center; text-align: center; padding-block: 56px 36px; }
+.formcard { max-width: 960px; margin: 0 auto 96px; background: var(--surface); border: 1px solid var(--line); border-radius: 24px; padding: 40px; display: flex; flex-direction: column; gap: 28px; }
+.sec-head { display: flex; align-items: center; gap: 14px; }
+.sec-head .n { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; background: var(--blue-soft); color: var(--blue-ink); font: 700 15px/1 var(--display); flex: none; }
+.togglerow { display: flex; align-items: center; gap: 12px; padding: 16px; border-radius: 12px; background: var(--raised); }
+.togglerow > div { flex: 1; min-width: 0; }
+.togglerow b { display: block; font: 600 14px/20px var(--body); }
+.counter { font: 600 12px/16px var(--body); color: var(--blue-ink); }
+
+/* ---------- 04 Buscar ---------- */
+.pagehead { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; flex-wrap: wrap; padding-block: 40px 0; }
+.pagehead .t { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.pagehead .tools { display: flex; gap: 12px; flex-wrap: wrap; }
+.pagehead .tools .control { width: 300px; max-width: 100%; }
+.search-layout { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 32px; align-items: start; padding-block: 32px 96px; }
+.filters { background: var(--surface); border: 1px solid var(--line); border-radius: 20px; padding: 24px; display: flex; flex-direction: column; gap: 26px; position: sticky; top: calc(env(safe-area-inset-top, 0px) + 88px); }
+.filters .fhead { display: flex; justify-content: space-between; align-items: center; }
+.fgroup { display: flex; flex-direction: column; gap: 12px; }
+.fgroup .top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.fgroup .top b { font: 600 14px/20px var(--body); }
+.fgroup .top span { font: 600 14px/20px var(--body); color: var(--blue-ink); }
+.range { position: relative; height: 20px; }
+.range .rt { position: absolute; left: 0; right: 0; top: 7px; height: 6px; border-radius: 3px; background: var(--raised); }
+.range .rf { position: absolute; top: 7px; height: 6px; border-radius: 3px; background: var(--blue); }
+.range .knob { position: absolute; top: 0; width: 20px; height: 20px; margin-left: -10px; border-radius: 50%; background: var(--surface); border: 3px solid var(--blue); }
+.range .me { position: absolute; top: -2px; width: 2px; height: 24px; margin-left: -1px; background: var(--gold-ink); }
+.scale { display: flex; justify-content: space-between; font: 600 12px/16px var(--body); color: var(--ink-3); }
+.results { display: flex; flex-direction: column; gap: 20px; min-width: 0; }
+.results-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.active-filters { display: flex; gap: 8px; flex-wrap: wrap; }
+.active-filters .chip { cursor: default; }
+.grid3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+.pcard { background: var(--surface); color: var(--ink); border: 1px solid var(--line); border-radius: 16px; padding: 20px; display: flex; flex-direction: column; gap: 16px; min-width: 0; transition: border-color .15s, box-shadow .15s; }
+.pcard:hover { border-color: var(--line-strong); box-shadow: 0 8px 24px rgba(17, 24, 39, .06); }
+.pc-head { display: flex; align-items: center; gap: 12px; }
+.pc-id { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.pc-id h3 { font: 600 20px/26px var(--display); overflow-wrap: anywhere; }
+.pc-id span { display: inline-flex; align-items: center; gap: 4px; font-size: 14px; color: var(--ink-3); }
+.pc-compat { display: flex; flex-direction: column; align-items: flex-end; }
+.pc-compat strong { font: 700 22px/26px var(--display); color: var(--ok); }
+.pc-compat span { font: 600 12px/16px var(--body); color: var(--ink-3); }
+.pc-elo { display: flex; justify-content: space-between; align-items: center; gap: 12px; background: var(--raised); border-radius: 12px; padding: 12px 14px; }
+.pc-elo .elo { display: block; font: 700 28px/34px var(--display); }
+.pc-tier { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+.pc-legends { display: flex; flex-direction: column; gap: 8px; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.pc-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: auto; }
+.pc-actions .btn { padding-inline: 10px; }
+.pager { display: flex; justify-content: center; align-items: center; gap: 8px; flex-wrap: wrap; }
+.pager .pg { width: 40px; height: 40px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); font: 600 14px/1 var(--body); color: var(--ink-2); cursor: pointer; }
+.pager .pg[aria-current="page"] { background: var(--blue); border-color: var(--blue); color: #FFFFFF; }
+.empty { background: var(--surface); border: 1px dashed var(--line-strong); border-radius: 16px; padding: 40px; text-align: center; display: flex; flex-direction: column; gap: 12px; align-items: center; }
+
+/* ---------- 05 Perfil ---------- */
+.content { padding-block: 32px 96px; display: flex; flex-direction: column; gap: 24px; }
+.back { align-self: flex-start; display: inline-flex; align-items: center; gap: 8px; font: 600 14px/20px var(--body); color: var(--ink-2); background: none; border: 0; cursor: pointer; padding: 4px 0; }
+.back:hover { color: var(--ink); }
+.prof-head { background: var(--surface); border: 1px solid var(--line); border-radius: 24px; padding: 32px; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 28px; align-items: center; }
+.prof-info { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.prof-name { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.meta { display: flex; gap: 20px; flex-wrap: wrap; color: var(--ink-3); font-size: 14px; }
+.meta span { display: inline-flex; align-items: center; gap: 6px; }
+.prof-info p { color: var(--ink-2); max-width: 42rem; }
+.prof-act { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; text-align: right; }
+.prof-act .big { font: 700 44px/48px var(--display); color: var(--ok); }
+.prof-act .btn { margin-top: 8px; }
+.two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 460px); gap: 24px; align-items: stretch; }
+.tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.tile { background: var(--raised); border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 4px; }
+.tile b { font: 700 28px/36px var(--display); }
+.cmp-scale { position: relative; height: 24px; }
+.cmp-scale .rt { position: absolute; left: 0; right: 0; top: 8px; height: 8px; border-radius: 4px; background: var(--raised); }
+.cmp-scale .mk { position: absolute; top: 4px; width: 16px; height: 16px; margin-left: -8px; border-radius: 50%; box-shadow: 0 0 0 3px var(--surface); }
+.mk.you { background: var(--blue); }
+.mk.them { background: var(--gold); }
+.legend-keys { display: flex; gap: 20px; flex-wrap: wrap; font: 600 12px/16px var(--body); color: var(--ink-2); }
+.legend-keys span { display: inline-flex; align-items: center; gap: 8px; }
+.legend-keys i { width: 10px; height: 10px; border-radius: 50%; display: block; }
+.crit { display: flex; flex-direction: column; gap: 10px; }
+.crit li { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--ink-2); }
+.crit li.yes .ic { color: var(--ok); }
+.crit li.no .ic { color: var(--ink-3); }
+.plain { list-style: none; margin: 0; padding: 0; }
+.legend-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.lcard { background: var(--raised); border-radius: 16px; padding: 20px; display: flex; align-items: center; gap: 16px; min-width: 0; }
+.lcard .portrait { width: 64px; height: 64px; border-radius: 14px; font-size: 28px; }
+.lcard .t { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.lcard .nm { display: flex; align-items: center; gap: 8px; }
+
+/* ---------- 06 Meu perfil ---------- */
+.mp-layout { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 32px; align-items: start; }
+.mp-side { display: flex; flex-direction: column; gap: 16px; position: sticky; top: calc(env(safe-area-inset-top, 0px) + 88px); }
+.who { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+.who .t { display: flex; flex-direction: column; gap: 6px; align-items: flex-start; }
+.headrow { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+.headrow .t { display: flex; flex-direction: column; gap: 8px; }
+
+/* ---------- 07 Dashboard ---------- */
+.kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; }
+.kpi { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 20px; display: flex; flex-direction: column; gap: 10px; }
+.kpi .top { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--ink-2); }
+.kpi .ib { width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center; background: var(--gold-soft); color: var(--gold-ink); flex: none; }
+.kpi .v { font: 600 36px/44px var(--body); letter-spacing: -0.01em; }
+.kpi .d { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; color: var(--ink-3); }
+.kpi .d.up { color: var(--ok); }
+.dash-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 440px); gap: 20px; }
+.chart-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; }
+.chart-head .t { display: flex; flex-direction: column; gap: 4px; }
+.key { display: inline-flex; align-items: center; gap: 8px; font: 600 12px/16px var(--body); color: var(--ink-2); }
+.key i { width: 10px; height: 10px; border-radius: 2px; background: var(--blue); display: block; }
+.colchart { display: grid; grid-template-columns: 40px minmax(0, 1fr); grid-template-rows: 260px auto; column-gap: 8px; }
+.yaxis { position: relative; font: 500 12px/16px var(--body); color: var(--ink-3); font-variant-numeric: tabular-nums; }
+.yaxis span { position: absolute; right: 0; transform: translateY(-50%); }
+.plot { position: relative; border-bottom: 1px solid var(--line-strong); }
+.plot .gl { position: absolute; left: 0; right: 0; height: 1px; background: var(--grid); }
+.cols { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); }
+.col { position: relative; display: flex; justify-content: center; align-items: flex-end; outline: none; }
+.col .bar { width: 24px; border-radius: 4px 4px 0 0; background: var(--bar); position: relative; }
+.col.hi .bar { background: var(--blue); }
+.col .val { position: absolute; bottom: calc(var(--h) + 6px); font: 600 12px/16px var(--body); color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.tip { position: absolute; bottom: calc(var(--h) + 28px); left: 50%; transform: translateX(-50%); background: var(--night); color: #FFFFFF; font: 500 12px/16px var(--body); padding: 6px 10px; border-radius: 8px; white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity .12s; z-index: 2; }
+.col:hover .tip, .col:focus-visible .tip, .hrow:hover .tip, .hrow:focus-visible .tip { opacity: 1; }
+.col:hover .bar, .col:focus-visible .bar { filter: brightness(.92); }
+.col:first-child .tip { left: 0; transform: none; }
+.col:last-child .tip, .col:nth-last-child(2) .tip { left: auto; right: 0; transform: none; }
+.xlabels { grid-column: 2; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); padding-top: 10px; text-align: center; }
+.xlabels b { display: block; font: 600 14px/20px var(--body); color: var(--ink-2); }
+.xlabels b.hi { color: var(--ink); }
+.xlabels span { font: 500 12px/16px var(--body); color: var(--ink-3); }
+.hbars { display: flex; flex-direction: column; gap: 14px; }
+.hrow { position: relative; display: grid; grid-template-columns: var(--lw, 120px) minmax(0, 1fr) auto; align-items: center; gap: 14px; outline: none; }
+.hrow .nm { display: inline-flex; align-items: center; gap: 8px; font: 600 14px/20px var(--body); min-width: 0; }
+.hrow .portrait { width: 22px; height: 22px; font-size: 11px; border-radius: 6px; }
+.hrow .tr { height: 10px; border-radius: 5px; background: var(--raised); overflow: hidden; }
+.hrow .tr i { display: block; height: 100%; border-radius: 5px; background: var(--bar); }
+.hrow.hi .tr i { background: var(--blue); }
+.hrow .vv { font: 600 14px/20px var(--body); color: var(--ink-2); font-variant-numeric: tabular-nums; text-align: right; }
+.hrow .tip { bottom: calc(100% + 4px); left: auto; right: 0; transform: none; }
+.toplist { display: flex; flex-direction: column; }
+.toplist li { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+.toplist li:last-child { border-bottom: 0; }
+.toplist .t { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.toplist .t b { font: 600 14px/20px var(--body); }
+.toplist .t span { font: 600 12px/16px var(--body); color: var(--ink-3); }
+.toplist .c { font: 700 16px/20px var(--display); color: var(--ok); }
+details.data { font-size: 14px; color: var(--ink-2); }
+details.data summary { cursor: pointer; font-weight: 600; color: var(--blue-ink); }
+.tablewrap { overflow-x: auto; margin-top: 12px; }
+table.dt { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
+table.dt th, table.dt td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--line); }
+table.dt td.r, table.dt th.r { text-align: right; }
+
+/* ---------- Modal ---------- */
+.modal { position: fixed; inset: 0; z-index: 50; background: var(--scrim); display: grid; place-items: center; padding: 24px max(16px, env(safe-area-inset-right, 0px)) 24px max(16px, env(safe-area-inset-left, 0px)); }
+.dialog { width: 100%; max-width: 480px; background: var(--surface); border-radius: 24px; padding: 28px; display: flex; flex-direction: column; gap: 20px; box-shadow: 0 24px 64px rgba(17, 24, 39, .3); }
+.dialog .top { display: flex; gap: 12px; align-items: flex-start; }
+.dialog .dib { width: 44px; height: 44px; border-radius: 12px; background: var(--discord); color: #FFFFFF; display: grid; place-items: center; flex: none; }
+.dialog .top .t { flex: 1; min-width: 0; }
+.xbtn { width: 32px; height: 32px; border-radius: 8px; border: 0; background: var(--raised); display: grid; place-items: center; cursor: pointer; color: var(--ink-2); flex: none; }
+.handle { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-radius: 12px; background: var(--field); border: 1px solid var(--line); }
+.handle .t { flex: 1; min-width: 0; }
+.handle b { display: block; font: 700 22px/28px var(--display); overflow-wrap: anywhere; user-select: all; }
+.dsteps { display: flex; flex-direction: column; gap: 10px; counter-reset: s; }
+.dsteps li { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--ink-2); counter-increment: s; }
+.dsteps li::before { content: counter(s); width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; background: var(--raised); font: 700 12px/1 var(--display); color: var(--ink-2); flex: none; }
+.dialog .acts { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+/* ---------- Controles do protótipo ---------- */
+.proto { position: fixed; right: max(16px, env(safe-area-inset-right, 0px)); bottom: max(16px, env(safe-area-inset-bottom, 0px)); z-index: 40; display: flex; align-items: center; gap: 10px; padding: 8px 8px 8px 14px; border-radius: 12px; background: var(--night); color: var(--on-dark); box-shadow: 0 8px 24px rgba(17, 24, 39, .3); font: 600 12px/16px var(--body); max-width: calc(100vw - 32px); }
+.proto select { background: #1F2937; color: var(--on-dark); border: 1px solid #374151; border-radius: 8px; padding: 6px 8px; font: 600 12px/16px var(--body); min-width: 0; }
+.proto .tag { color: var(--gold); white-space: nowrap; }
+.toast { position: fixed; left: 50%; bottom: max(80px, calc(env(safe-area-inset-bottom, 0px) + 80px)); transform: translateX(-50%); z-index: 60; background: var(--night); color: var(--on-dark); padding: 12px 18px; border-radius: 10px; font: 600 14px/20px var(--body); box-shadow: 0 8px 24px rgba(17, 24, 39, .3); display: inline-flex; gap: 8px; align-items: center; max-width: calc(100vw - 32px); }
+.toast .ic { color: var(--gold); }
+
+/* ---------- Responsivo ---------- */
+@media (max-width: 1180px) {
+  .grid3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .dash-row, .two { grid-template-columns: minmax(0, 1fr); }
+  .legend-cards { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 960px) {
+  .hero .wrap { grid-template-columns: minmax(0, 1fr); gap: 40px; padding-block: 72px 88px; }
+  .search-layout, .mp-layout { grid-template-columns: minmax(0, 1fr); }
+  .filters, .mp-side { position: static; }
+  .split { grid-template-columns: minmax(0, 1fr); min-height: 0; }
+  .panel .preview { display: none; }
+  .prof-head { grid-template-columns: auto minmax(0, 1fr); }
+  .prof-act { grid-column: 1 / -1; align-items: flex-start; text-align: left; }
+  .steps { grid-template-columns: minmax(0, 1fr); }
+  .topbar .wrap { flex-wrap: wrap; row-gap: 0; padding-top: 10px; }
+  .nav { order: 3; width: 100%; overflow-x: auto; padding-bottom: 8px; }
+  .userchip .info { display: none; }
+}
+@media (max-width: 640px) {
+  .row2, .grid3, .kpis, .tiles { grid-template-columns: minmax(0, 1fr); }
+  .formcard, .card, .cta { padding: 20px; }
+  .cta { padding: 28px 20px; }
+  .h1 { font-size: 32px; line-height: 40px; }
+  .duo-pair { grid-template-columns: minmax(0, 1fr); }
+  .duo-link { justify-self: center; }
+  .prof-head { grid-template-columns: minmax(0, 1fr); padding: 20px; }
+  .colchart { grid-template-columns: 32px minmax(0, 1fr); }
+  .xlabels span { display: none; }
+  .hrow { --lw: 76px; }
+  .proto .tag { display: none; }
+  .banner-tools { right: auto; left: var(--gutter-l); }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></symbol>
+  <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+  <symbol id="i-left" viewBox="0 0 24 24"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></symbol>
+  <symbol id="i-right" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+  <symbol id="i-message" viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></symbol>
+  <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></symbol>
+  <symbol id="i-swords" viewBox="0 0 24 24"><polyline points="14.5 17.5 3 6 3 3 6 3 17.5 14.5"/><line x1="13" x2="19" y1="19" y2="13"/><line x1="16" x2="20" y1="16" y2="20"/><line x1="19" x2="21" y1="21" y2="19"/><polyline points="14.5 6.5 18 3 21 3 21 6 17.5 9.5"/><line x1="5" x2="9" y1="14" y2="18"/><line x1="7" x2="4" y1="17" y2="20"/><line x1="3" x2="5" y1="19" y2="21"/></symbol>
+  <symbol id="i-userplus" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol>
+  <symbol id="i-trophy" viewBox="0 0 24 24"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
+  <symbol id="i-sliders" viewBox="0 0 24 24"><line x1="21" x2="14" y1="4" y2="4"/><line x1="10" x2="3" y1="4" y2="4"/><line x1="21" x2="12" y1="12" y2="12"/><line x1="8" x2="3" y1="12" y2="12"/><line x1="21" x2="16" y1="20" y2="20"/><line x1="12" x2="3" y1="20" y2="20"/><line x1="14" x2="14" y1="2" y2="6"/><line x1="8" x2="8" y1="10" y2="14"/><line x1="16" x2="16" y1="18" y2="22"/></symbol>
+  <symbol id="i-zap" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></symbol>
+  <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></symbol>
+  <symbol id="i-trend" viewBox="0 0 24 24"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></symbol>
+  <symbol id="i-logout" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></symbol>
+  <symbol id="i-gamepad" viewBox="0 0 24 24"><line x1="6" x2="10" y1="11" y2="11"/><line x1="8" x2="8" y1="9" y2="13"/><line x1="15" x2="15.01" y1="12" y2="12"/><line x1="18" x2="18.01" y1="10" y2="10"/><path d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59c-.006.052-.01.101-.017.152C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.545-.604-6.584-.685-7.258-.007-.05-.011-.1-.017-.151A4 4 0 0 0 17.32 5z"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></symbol>
+  <symbol id="i-image" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></symbol>
+</svg>
+
+<header class="topbar" id="topbar" hidden>
+  <div class="wrap">
+    <a class="logo" href="#inicio" id="top-logo" aria-label="DuoFinder, início">
+      <span class="mark"><svg class="ic"><use href="#i-swords"/></svg></span>
+      <span class="wm"><small>Brawlhalla</small><b>Duo<em>Finder</em></b></span>
+    </a>
+    <nav class="nav" id="nav" aria-label="Principal"></nav>
+    <div class="top-actions" id="top-actions"></div>
+  </div>
+</header>
+
+<main id="app">
+
+<!-- ===================== 01 · Início ===================== -->
+<section class="screen" data-route="inicio" aria-label="Início">
+  <div class="hero" id="hero">
+    <div class="hero-art" id="hero-art" aria-hidden="true">
+      <svg viewBox="0 0 1440 680" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#3B82F6"/><stop offset=".55" stop-color="#1D4ED8"/><stop offset="1" stop-color="#111827"/>
+          </linearGradient>
+          <radialGradient id="glow" cx=".5" cy=".5" r=".5">
+            <stop offset="0" stop-color="#F4B942" stop-opacity=".6"/><stop offset="1" stop-color="#F4B942" stop-opacity="0"/>
+          </radialGradient>
+          <g id="isle">
+            <path d="M8 6 H512 L468 46 L384 74 L318 148 L238 82 L142 52 Z" fill="#1E293B"/>
+            <path d="M318 148 L384 74 L468 46 L512 6 L512 20 L470 52 L390 80Z" fill="#0F172A" opacity=".6"/>
+            <rect x="0" y="0" width="520" height="12" rx="6" fill="#F4B942"/>
+          </g>
+        </defs>
+        <rect width="1440" height="680" fill="url(#sky)"/>
+        <circle cx="1080" cy="300" r="470" fill="url(#glow)"/>
+        <use href="#isle" transform="translate(700 470) scale(1.15)"/>
+        <use href="#isle" transform="translate(1110 210) scale(.5)"/>
+        <use href="#isle" transform="translate(590 150) scale(.34)"/>
+        <g fill="#FFFFFF" opacity=".85">
+          <circle cx="760" cy="80" r="3"/><circle cx="910" cy="210" r="2"/><circle cx="1300" cy="90" r="4"/><circle cx="1130" cy="380" r="2"/><circle cx="660" cy="410" r="2"/><circle cx="1390" cy="470" r="3"/><circle cx="1010" cy="60" r="2"/>
+        </g>
+      </svg>
+    </div>
+    <div class="hero-img" id="hero-img" hidden></div>
+    <div class="hero-shade" aria-hidden="true"></div>
+    <div class="wrap">
+      <div class="hero-copy">
+        <span class="eyebrow"><svg class="ic xs"><use href="#i-zap"/></svg>Feito para o 2v2 ranqueado</span>
+        <h1 class="display">Encontre a <em>dupla certa</em> para subir no 2v2</h1>
+        <p class="lead">Conecte-se com jogadores de Elo parecido, veja as Lendas que eles dominam e chame no Discord para formar sua dupla ranqueada.</p>
+        <div class="hero-ctas">
+          <a class="btn gold lg" href="#cadastro"><svg class="ic"><use href="#i-userplus"/></svg>Criar conta grátis</a>
+          <a class="btn secondary lg" href="#login">Já tenho conta</a>
+        </div>
+        <div class="hero-stats">
+          <div><b>1.248</b><span>jogadores cadastrados</span></div>
+          <div><b>9</b><span>regiões do jogo</span></div>
+          <div><b>60+</b><span>Lendas para escolher</span></div>
+        </div>
+      </div>
+      <aside class="duo" aria-label="Exemplo de dupla sugerida">
+        <div class="duo-top">
+          <h2 class="h3">Dupla sugerida para você</h2>
+          <span class="pill ok"><svg class="ic xs"><use href="#i-check"/></svg>Elo compatível</span>
+        </div>
+        <div class="duo-pair">
+          <div class="duo-player"><span class="avatar">JC</span><b class="h3">Jacob</b><span class="tier platina">Platina 3</span><span class="elo num">1820</span><span class="label">Você</span></div>
+          <span class="duo-link">DUO</span>
+          <div class="duo-player"><span class="avatar">ZY</span><b class="h3">Zyphr</b><span class="tier platina">Platina 3</span><span class="elo num">1865</span><span class="label">+45 de Elo</span></div>
+        </div>
+        <div class="meter">
+          <div class="meter-top"><span class="small" style="font-weight:600;color:var(--ink-2)">Compatibilidade</span><b>96%</b></div>
+          <div class="track"><i style="width:96%"></i></div>
+        </div>
+        <div class="pc-legends">
+          <span class="label">Lendas em comum</span>
+          <div class="tags"><span class="ltag"><span class="portrait v0">H</span>Hattori</span><span class="ltag"><span class="portrait v1">O</span>Orion</span><span class="ltag"><span class="portrait v2">K</span>Kor</span></div>
+        </div>
+        <a class="btn discord lg block" href="#cadastro"><svg class="ic"><use href="#i-message"/></svg>Chamar no Discord</a>
+      </aside>
+    </div>
+    <div class="banner-tools" data-proto>
+      <label class="glass" for="banner-file"><svg class="ic sm"><use href="#i-image"/></svg>Escolher imagem do banner</label>
+      <button class="glass" id="banner-clear" type="button" hidden>Voltar à arte provisória</button>
+      <input class="sr" type="file" id="banner-file" accept="image/png,image/jpeg,image/webp">
+    </div>
+  </div>
+
+  <div class="how" id="como-funciona">
+    <div class="wrap">
+      <div class="how-head">
+        <span class="overline">Como funciona</span>
+        <h2 class="h1">Três passos até sua próxima dupla</h2>
+        <p class="lead">O DuoFinder não tem chat nem partidas próprias. Ele conecta você ao jogador certo, e o resto acontece no Discord e no jogo.</p>
+      </div>
+      <div class="steps">
+        <article class="step"><span class="n">1</span><span class="ib"><svg class="ic"><use href="#i-userplus"/></svg></span><h3 class="h3">Crie seu perfil</h3><p>Informe seu nickname, Elo do 2v2, região e até 3 Lendas favoritas. O Discord é opcional.</p></article>
+        <article class="step"><span class="n">2</span><span class="ib"><svg class="ic"><use href="#i-search"/></svg></span><h3 class="h3">Busque parceiros</h3><p>Filtre jogadores por proximidade de Elo, região e Lendas. Os mais compatíveis aparecem primeiro.</p></article>
+        <article class="step"><span class="n">3</span><span class="ib"><svg class="ic"><use href="#i-message"/></svg></span><h3 class="h3">Chame no Discord</h3><p>Gostou do perfil? Copie o Discord do jogador, combine o horário e partiu ranqueada.</p></article>
+      </div>
+    </div>
+  </div>
+
+  <div class="cta-band">
+    <div class="wrap">
+      <div class="cta">
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <h2 class="h2">Pronto para achar sua dupla?</h2>
+          <p class="lead" style="color:var(--on-dark-2)">Crie seu perfil e veja quem está no seu Elo agora.</p>
+        </div>
+        <a class="btn gold lg" href="#cadastro">Criar conta grátis<svg class="ic"><use href="#i-right"/></svg></a>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site" id="sobre">
+    <div class="wrap">
+      <div class="row">
+        <a class="logo" href="#inicio"><span class="mark"><svg class="ic"><use href="#i-swords"/></svg></span><span class="wm"><small>Brawlhalla</small><b>Duo<em>Finder</em></b></span></a>
+        <span class="small muted">Projeto Individual · SPTech · Análise e Desenvolvimento de Sistemas · 2026</span>
+      </div>
+      <p class="small muted">Projeto acadêmico sem vínculo com a Blue Mammoth Games ou a Ubisoft. Brawlhalla é marca de seus respectivos donos. Jogadores e números deste protótipo são fictícios.</p>
+    </div>
+  </footer>
+</section>
+
+<!-- ===================== 02 · Login ===================== -->
+<section class="screen" data-route="login" aria-label="Entrar">
+  <div class="split">
+    <div class="panel">
+      <span class="deco" aria-hidden="true">2v2</span>
+      <a class="logo on-dark" href="#inicio"><span class="mark"><svg class="ic"><use href="#i-swords"/></svg></span><span class="wm"><small>Brawlhalla</small><b>Duo<em>Finder</em></b></span></a>
+      <div class="msg">
+        <span class="overline">Bem-vindo de volta</span>
+        <h1 class="h1">Sua dupla do 2v2 está te esperando.</h1>
+        <p class="lead" style="color:var(--on-dark-2)">Entre para ver jogadores com Elo próximo ao seu e continuar de onde parou.</p>
+        <div class="preview" id="login-preview"></div>
+      </div>
+      <p class="foot">Projeto Individual · SPTech ADS · 2026</p>
+    </div>
+    <div class="form-side">
+      <form class="form" id="login-form" novalidate>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <h2 class="h2">Entrar na sua conta</h2>
+          <p class="muted">Ainda não tem conta? <a class="link" href="#cadastro">Criar conta</a></p>
+        </div>
+        <div class="field"><label for="lg-email">E-mail</label><div class="control"><svg class="ic sm"><use href="#i-mail"/></svg><input id="lg-email" type="email" value="jacob@email.com" autocomplete="email"></div></div>
+        <div class="field"><label for="lg-pass">Senha</label><div class="control"><svg class="ic sm"><use href="#i-lock"/></svg><input id="lg-pass" type="password" value="duofinder2v2" autocomplete="current-password"></div></div>
+        <div class="between">
+          <label class="check"><input type="checkbox" id="lg-remember" checked>Lembrar de mim</label>
+          <button type="button" class="link" id="forgot">Esqueci minha senha</button>
+        </div>
+        <button class="btn primary lg block" type="submit">Entrar<svg class="ic"><use href="#i-right"/></svg></button>
+        <div class="note gold"><svg class="ic sm"><use href="#i-shield"/></svg><span>Seu e-mail nunca aparece para outros jogadores. Só o Discord, e apenas se você permitir.</span></div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 03 · Cadastro ===================== -->
+<section class="screen" data-route="cadastro" aria-label="Cadastro">
+  <div class="simplebar">
+    <div class="wrap">
+      <a class="logo" href="#inicio"><span class="mark"><svg class="ic"><use href="#i-swords"/></svg></span><span class="wm"><small>Brawlhalla</small><b>Duo<em>Finder</em></b></span></a>
+      <span class="small muted">Já tem uma conta? <a class="btn ghost" href="#login">Entrar</a></span>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="page-head">
+      <span class="overline">Cadastro</span>
+      <h1 class="h1">Crie seu perfil de jogador</h1>
+      <p class="lead">Leva menos de 2 minutos. Você pode editar tudo depois em Meu perfil.</p>
+    </div>
+    <form class="formcard" id="signup-form" novalidate>
+      <div class="sec-head"><span class="n">1</span><div><h2 class="h3">Dados da conta</h2><p class="small muted">Usados só para login. Seu e-mail não aparece para ninguém.</p></div></div>
+      <div class="row2">
+        <div class="field"><label for="su-nick">Nickname no jogo</label><div class="control"><svg class="ic sm"><use href="#i-gamepad"/></svg><input id="su-nick" value="Jacob" autocomplete="nickname"></div></div>
+        <div class="field"><label for="su-email">E-mail</label><div class="control"><svg class="ic sm"><use href="#i-mail"/></svg><input id="su-email" type="email" value="jacob@email.com" autocomplete="email"></div></div>
+      </div>
+      <div class="row2">
+        <div class="field"><label for="su-pass">Senha</label><div class="control"><svg class="ic sm"><use href="#i-lock"/></svg><input id="su-pass" type="password" value="duofinder2v2" autocomplete="new-password"></div><span class="help">Mínimo de 8 caracteres</span></div>
+        <div class="field"><label for="su-pass2">Confirmar senha</label><div class="control"><svg class="ic sm"><use href="#i-lock"/></svg><input id="su-pass2" type="password" value="duofinder2v2" autocomplete="new-password"></div></div>
+      </div>
+      <hr class="divider">
+      <div class="sec-head"><span class="n">2</span><div><h2 class="h3">Dados competitivos</h2><p class="small muted">É com eles que encontramos jogadores compatíveis com você.</p></div></div>
+      <div class="row2">
+        <div class="field"><label for="su-elo">Elo atual no 2v2</label><div class="control"><svg class="ic sm"><use href="#i-trophy"/></svg><input id="su-elo" type="number" inputmode="numeric" min="200" max="3000" value="1820"></div><span class="help">Veja no seu perfil ranqueado dentro do jogo</span></div>
+        <div class="field"><label for="su-region">Região</label><div class="control"><svg class="ic sm"><use href="#i-globe"/></svg><select id="su-region"></select><svg class="ic sm"><use href="#i-chevron"/></svg></div><span class="help">Servidor onde você mais joga</span></div>
+      </div>
+      <div class="field">
+        <div class="headrow"><span class="flabel">Lendas favoritas (até 3)</span><span class="counter" id="su-count"></span></div>
+        <div class="chips" id="su-legends" role="group" aria-label="Lendas favoritas"></div>
+      </div>
+      <hr class="divider">
+      <div class="sec-head"><span class="n">3</span><div><h2 class="h3">Contato (opcional)</h2><p class="small muted">Facilita para o seu futuro parceiro te chamar.</p></div></div>
+      <div class="row2">
+        <div class="field"><label for="su-discord">Discord</label><div class="control"><svg class="ic sm"><use href="#i-message"/></svg><input id="su-discord" value="jacob.bh"></div><span class="help">Seu nome de usuário no Discord</span></div>
+        <div class="field"><label for="su-time">Horário em que costuma jogar</label><div class="control"><svg class="ic sm"><use href="#i-clock"/></svg><select id="su-time"></select><svg class="ic sm"><use href="#i-chevron"/></svg></div></div>
+      </div>
+      <div class="togglerow"><div><b>Mostrar meu Discord para outros jogadores</b><span class="small muted">Se desligado, ninguém vê seu contato. Dá para mudar quando quiser.</span></div><button type="button" class="switch" role="switch" aria-checked="true" id="su-show" aria-label="Mostrar meu Discord"></button></div>
+      <hr class="divider">
+      <div class="headrow">
+        <label class="check"><input type="checkbox" id="su-terms" checked>Li e aceito os termos de uso do projeto</label>
+        <button class="btn primary lg" type="submit">Criar conta<svg class="ic"><use href="#i-right"/></svg></button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- ===================== 04 · Buscar dupla ===================== -->
+<section class="screen" data-route="buscar" aria-label="Buscar dupla">
+  <div class="wrap">
+    <div class="pagehead">
+      <div class="t">
+        <h1 class="h1">Buscar dupla</h1>
+        <p class="muted" id="busca-sub"></p>
+      </div>
+      <div class="tools">
+        <div class="control"><svg class="ic sm"><use href="#i-search"/></svg><input id="q" type="search" placeholder="Buscar por nickname" aria-label="Buscar por nickname"></div>
+        <div class="control" style="width:280px"><svg class="ic sm"><use href="#i-sliders"/></svg><select id="sort" aria-label="Ordenar resultados"><option value="compat">Mais compatíveis primeiro</option><option value="diff">Elo mais próximo primeiro</option><option value="elo">Maior Elo primeiro</option></select><svg class="ic sm"><use href="#i-chevron"/></svg></div>
+      </div>
+    </div>
+    <div class="search-layout">
+      <aside class="filters" aria-label="Filtros">
+        <div class="fhead"><span style="display:inline-flex;gap:8px;align-items:center"><svg class="ic"><use href="#i-sliders"/></svg><b class="h3">Filtros</b></span><button class="link" type="button" id="clear">Limpar</button></div>
+        <div class="fgroup">
+          <div class="top"><b>Faixa de Elo</b><span id="range-label" class="num"></span></div>
+          <div class="range" aria-hidden="true"><div class="rt"></div><div class="rf" id="rf"></div><div class="me" id="rme"></div><div class="knob" id="k1"></div><div class="knob" id="k2"></div></div>
+          <div class="scale num"><span>1500</span><span id="range-mid"></span><span>2150</span></div>
+          <div class="chips" id="range-chips" role="group" aria-label="Distância máxima de Elo"></div>
+        </div>
+        <div class="fgroup"><div class="top"><b>Região</b></div><div class="chips" id="region-chips" role="group" aria-label="Regiões"></div></div>
+        <div class="fgroup"><div class="top"><b>Lendas</b><span id="legend-label">Qualquer uma</span></div><div class="chips" id="legend-chips" role="group" aria-label="Lendas"></div></div>
+        <div class="togglerow" style="padding:0;background:none"><div><b>Só com Discord</b><span class="small muted">Mostrar apenas quem tem contato</span></div><button type="button" class="switch" role="switch" aria-checked="false" id="discord-only" aria-label="Só com Discord"></button></div>
+      </aside>
+      <div class="results">
+        <div class="results-head"><p id="count" class="muted"></p><div class="active-filters" id="active"></div></div>
+        <div class="grid3" id="grid"></div>
+        <div class="pager" aria-label="Páginas"><button class="pg" aria-current="page">1</button><button class="pg">2</button><button class="pg">3</button><button class="btn ghost" type="button">Próxima<svg class="ic sm"><use href="#i-right"/></svg></button></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 05 · Perfil do jogador ===================== -->
+<section class="screen" data-route="perfil" aria-label="Perfil do jogador">
+  <div class="wrap content" id="perfil"></div>
+</section>
+
+<!-- ===================== 06 · Meu perfil ===================== -->
+<section class="screen" data-route="meu-perfil" aria-label="Meu perfil">
+  <div class="wrap content">
+    <div class="headrow">
+      <div class="t"><h1 class="h1">Meu perfil</h1><p class="muted">Mantenha seu Elo atualizado para receber sugestões de dupla mais precisas.</p></div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap"><button class="btn ghost" type="button" id="mp-cancel">Cancelar</button><button class="btn primary" type="button" id="mp-save"><svg class="ic sm"><use href="#i-check"/></svg>Salvar alterações</button></div>
+    </div>
+    <div class="mp-layout">
+      <form class="card" id="mp-form" novalidate style="padding:32px;gap:24px">
+        <div class="who"><span class="avatar lg" id="mp-avatar"></span><div class="t"><b class="h2" id="mp-name"></b><span id="mp-tier"></span><span class="small muted">Seu avatar usa as iniciais do seu nickname.</span></div></div>
+        <hr class="divider">
+        <h2 class="h3">Dados do jogador</h2>
+        <div class="row2">
+          <div class="field"><label for="mp-nick">Nickname no jogo</label><div class="control"><svg class="ic sm"><use href="#i-gamepad"/></svg><input id="mp-nick" maxlength="20"></div></div>
+          <div class="field"><label for="mp-email">E-mail</label><div class="control"><svg class="ic sm"><use href="#i-mail"/></svg><input id="mp-email" type="email" value="jacob@email.com"></div></div>
+        </div>
+        <div class="row2">
+          <div class="field"><label for="mp-elo">Elo atual no 2v2</label><div class="control"><svg class="ic sm"><use href="#i-trophy"/></svg><input id="mp-elo" type="number" inputmode="numeric" min="200" max="3000"></div><span class="help">Última atualização: 20/10/2026</span></div>
+          <div class="field"><label for="mp-region">Região</label><div class="control"><svg class="ic sm"><use href="#i-globe"/></svg><select id="mp-region"></select><svg class="ic sm"><use href="#i-chevron"/></svg></div></div>
+        </div>
+        <div class="field">
+          <div class="headrow"><span class="flabel">Lendas favoritas (até 3)</span><span class="counter" id="mp-count"></span></div>
+          <div class="chips" id="mp-legends" role="group" aria-label="Lendas favoritas"></div>
+        </div>
+        <hr class="divider">
+        <h2 class="h3">Contato e preferências</h2>
+        <div class="row2">
+          <div class="field"><label for="mp-discord">Discord</label><div class="control"><svg class="ic sm"><use href="#i-message"/></svg><input id="mp-discord"></div></div>
+          <div class="field"><label for="mp-time">Horário em que costuma jogar</label><div class="control"><svg class="ic sm"><use href="#i-clock"/></svg><select id="mp-time"></select><svg class="ic sm"><use href="#i-chevron"/></svg></div></div>
+        </div>
+        <div class="togglerow"><div><b>Mostrar meu Discord para outros jogadores</b><span class="small muted">Se desligado, ninguém vê seu contato.</span></div><button type="button" class="switch" role="switch" aria-checked="true" id="mp-show" aria-label="Mostrar meu Discord"></button></div>
+        <div class="field"><label for="mp-bio">Sobre você (opcional)</label><textarea class="area" id="mp-bio" maxlength="200"></textarea><span class="help" id="mp-bio-count" style="text-align:right"></span></div>
+      </form>
+      <aside class="mp-side">
+        <span class="overline" style="color:var(--ink-3)">Pré-visualização</span>
+        <p class="small" style="color:var(--ink-2)">É assim que outros jogadores veem seu card na busca.</p>
+        <div id="mp-preview"></div>
+        <div class="note blue"><svg class="ic sm"><use href="#i-info"/></svg><span>Atualize seu Elo sempre que terminar uma sessão de ranqueadas.</span></div>
+        <a class="btn ghost" href="#inicio" style="align-self:flex-start"><svg class="ic sm"><use href="#i-logout"/></svg>Sair da conta</a>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 07 · Dashboard ===================== -->
+<section class="screen" data-route="dashboard" aria-label="Dashboard">
+  <div class="wrap content">
+    <div class="headrow">
+      <div class="t"><h1 class="h1">Dashboard da comunidade</h1><p class="muted">Indicadores dos jogadores cadastrados no DuoFinder · dados de exemplo, atualizados em 22/10/2026</p></div>
+    </div>
+    <div class="kpis">
+      <div class="kpi"><div class="top"><span class="ib"><svg class="ic"><use href="#i-users"/></svg></span>Jogadores cadastrados</div><div class="v">1.248</div><span class="d up"><svg class="ic sm"><use href="#i-trend"/></svg>+86 este mês</span></div>
+      <div class="kpi"><div class="top"><span class="ib"><svg class="ic"><use href="#i-target"/></svg></span>Com Elo compatível com você</div><div class="v">137</div><span class="d">na sua faixa de ±150 de Elo</span></div>
+      <div class="kpi"><div class="top"><span class="ib"><svg class="ic"><use href="#i-trophy"/></svg></span>Elo médio da comunidade</div><div class="v">1.412</div><span class="d">equivale a Ouro 1</span></div>
+      <div class="kpi"><div class="top"><span class="ib"><svg class="ic"><use href="#i-message"/></svg></span>Com Discord disponível</div><div class="v">74%</div><span class="d">924 jogadores</span></div>
+    </div>
+    <div class="dash-row">
+      <div class="card">
+        <div class="chart-head"><div class="t"><h2 class="h3">Distribuição de Elo</h2><span class="small muted">Jogadores por divisão no 2v2</span></div><span class="key"><i></i>Sua divisão</span></div>
+        <div class="colchart" id="colchart"></div>
+        <details class="data"><summary>Ver dados em tabela</summary><div class="tablewrap" id="dist-table"></div></details>
+      </div>
+      <div class="card">
+        <div class="chart-head"><div class="t"><h2 class="h3">Lendas mais escolhidas</h2><span class="small muted">% de jogadores com a Lenda entre as favoritas</span></div><span class="key"><i></i>Suas Lendas</span></div>
+        <div class="hbars" id="legend-bars"></div>
+      </div>
+    </div>
+    <div class="dash-row">
+      <div class="card">
+        <div class="chart-head"><div class="t"><h2 class="h3">Jogadores por região</h2><span class="small muted">Total de 1.248 jogadores cadastrados</span></div><span class="key"><i></i>Sua região</span></div>
+        <div class="hbars" id="region-bars" style="--lw:72px"></div>
+      </div>
+      <div class="card">
+        <div class="chart-head"><h2 class="h3">Mais compatíveis agora</h2><a class="link" href="#buscar">Ver todos</a></div>
+        <ul class="plain toplist" id="toplist"></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ===================== 08 · Modal Discord ===================== -->
+<div class="modal" id="modal" hidden>
+  <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="top">
+      <span class="dib"><svg class="ic"><use href="#i-message"/></svg></span>
+      <div class="t"><h2 class="h3" id="modal-title"></h2><p class="small muted">Adicione como amigo e combinem a dupla.</p></div>
+      <button class="xbtn" type="button" data-close aria-label="Fechar"><svg class="ic sm"><use href="#i-x"/></svg></button>
+    </div>
+    <div class="handle"><div class="t"><span class="label">Usuário do Discord</span><b id="modal-handle"></b></div><button class="btn secondary" type="button" id="copy"><svg class="ic sm"><use href="#i-copy"/></svg>Copiar</button></div>
+    <ol class="plain dsteps">
+      <li>Abra o Discord e vá em “Adicionar amigo”</li>
+      <li>Cole o usuário e envie o pedido de amizade</li>
+      <li>Combinem o horário e partam para o 2v2 ranqueado</li>
+    </ol>
+    <div class="note gold"><svg class="ic sm"><use href="#i-info"/></svg><span>O DuoFinder não tem chat próprio: a conversa acontece no Discord.</span></div>
+    <div class="acts"><button class="btn ghost lg" type="button" data-close>Fechar</button><a class="btn discord lg" href="https://discord.com/app" target="_blank" rel="noopener"><svg class="ic"><use href="#i-message"/></svg>Abrir Discord</a></div>
+  </div>
+</div>
+
+<nav class="proto" data-proto aria-label="Navegação do protótipo">
+  <span class="tag">Protótipo · dados fictícios</span>
+  <label class="sr" for="proto-screen">Ir para a tela</label>
+  <select id="proto-screen">
+    <option value="inicio">01 · Início</option>
+    <option value="login">02 · Login</option>
+    <option value="cadastro">03 · Cadastro</option>
+    <option value="buscar">04 · Buscar dupla</option>
+    <option value="perfil">05 · Perfil do jogador</option>
+    <option value="meu-perfil">06 · Meu perfil</option>
+    <option value="dashboard">07 · Dashboard</option>
+  </select>
+</nav>
+<div class="toast" id="toast" role="status" hidden><svg class="ic sm"><use href="#i-check"/></svg><span></span></div>
+
+<script>
+(() => {
+  'use strict';
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+  const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const icon = (n, cls = 'sm') => `<svg class="ic ${cls}"><use href="#i-${n}"/></svg>`;
+  const store = {
+    get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+    set(k, v) { try { localStorage.setItem(k, v); return true; } catch (e) { return false; } },
+    del(k) { try { localStorage.removeItem(k); } catch (e) { /* sem armazenamento */ } },
+  };
+
+  // ---------- Dados de exemplo ----------
+  const REGIONS = ['BRZ', 'US-E', 'US-W', 'EU', 'SA', 'SEA', 'AUS', 'JPN', 'ME'];
+  const REGION_NAMES = { 'BRZ': 'Brasil (BRZ)', 'US-E': 'EUA Leste (US-E)', 'US-W': 'EUA Oeste (US-W)', 'EU': 'Europa (EU)', 'SA': 'África do Sul (SA)', 'SEA': 'Sudeste Asiático (SEA)', 'AUS': 'Austrália (AUS)', 'JPN': 'Japão (JPN)', 'ME': 'Oriente Médio (ME)' };
+  const TIMES = ['Manhã', 'Tarde', 'Noite', 'Madrugada'];
+  const WEAPONS = { Hattori: 'Espada · Lança', Orion: 'Lança-foguete · Lança', Kor: 'Manoplas · Martelo', Val: 'Manoplas · Espada', Ember: 'Arco · Katars', Jhala: 'Machado · Espada', Ada: 'Blasters · Lança', Teros: 'Machado · Martelo', Koji: 'Arco · Espada', Thatch: 'Espada · Blasters', Mordex: 'Foice · Manoplas', Sidra: 'Canhão · Espada', Artemis: 'Lança-foguete · Foice', Caspian: 'Manoplas · Katars', Zariel: 'Manoplas · Arco', 'Bödvar': 'Martelo · Espada', Yumiko: 'Martelo · Arco', Ulgrim: 'Machado · Lança-foguete' };
+  const LEGENDS = Object.keys(WEAPONS);
+  const TIERS = [
+    { key: 'tin', name: 'Tin', min: 0, max: 909 },
+    { key: 'bronze', name: 'Bronze', min: 910, max: 1129 },
+    { key: 'prata', name: 'Prata', min: 1130, max: 1389 },
+    { key: 'ouro', name: 'Ouro', min: 1390, max: 1679 },
+    { key: 'platina', name: 'Platina', min: 1680, max: 1999 },
+    { key: 'diamante', name: 'Diamante', min: 2000, max: Infinity },
+  ];
+  const PLAYERS = [
+    { id: 'zyphr', nick: 'Zyphr', elo: 1865, peak: 1912, region: 'BRZ', legends: ['Hattori', 'Orion', 'Kor'], discord: 'zyphr.bh', time: 'Noite', since: 'set/2026', bio: 'Main Hattori há 3 temporadas. Procuro dupla fixa para chegar ao Diamante. Jogo agressivo e gosto de parceiro que segure o centro do mapa.' },
+    { id: 'kaizen', nick: 'Kaizen', elo: 1790, peak: 1834, region: 'BRZ', legends: ['Val', 'Ember', 'Jhala'], discord: 'kaizen_bh', time: 'Noite', since: 'ago/2026', bio: 'Jogo mais de suporte e gosto de quem puxa a luta. Disponível quase toda noite.' },
+    { id: 'lunna', nick: 'Lunna', elo: 1902, peak: 1950, region: 'BRZ', legends: ['Ada', 'Teros', 'Koji'], discord: 'lunna.gg', time: 'Tarde', since: 'out/2026', bio: 'Ada main, foco em edgeguard. Quero chegar ao Diamante ainda nesta temporada.' },
+    { id: 'thunder', nick: 'ThunderBR', elo: 1748, peak: 1801, region: 'BRZ', legends: ['Thatch', 'Mordex', 'Sidra'], discord: 'thunderbr', time: 'Noite', since: 'set/2026', bio: 'Jogo desde 2018. Procuro dupla para treinar combos de 2v2 e subir com calma.' },
+    { id: 'mizuki', nick: 'Mizuki', elo: 1933, peak: 1988, region: 'BRZ', legends: ['Artemis', 'Caspian', 'Zariel'], discord: null, time: 'Madrugada', since: 'jul/2026', bio: 'Prefiro jogar de madrugada. Ainda sem Discord, me chama dentro do jogo.' },
+    { id: 'rato', nick: 'RatoVeloz', elo: 1705, peak: 1760, region: 'BRZ', legends: ['Bödvar', 'Hattori', 'Ember'], discord: 'ratoveloz', time: 'Tarde', since: 'out/2026', bio: 'Rápido no dodge, ruim de recovery. Bora jogar e evoluir junto.' },
+    { id: 'nox', nick: 'Nox', elo: 1842, peak: 1870, region: 'US-E', legends: ['Koji', 'Val', 'Orion'], discord: 'nox.na', time: 'Noite', since: 'set/2026', bio: 'Brasileiro jogando no US-E. Falo português e inglês.' },
+    { id: 'sakura', nick: 'Sakura', elo: 1611, peak: 1690, region: 'BRZ', legends: ['Yumiko', 'Hattori', 'Ember'], discord: 'sakura.bh', time: 'Noite', since: 'out/2026', bio: 'Subindo do Ouro. Procuro alguém paciente para jogar junto.' },
+    { id: 'brick', nick: 'Brick', elo: 2015, peak: 2061, region: 'BRZ', legends: ['Teros', 'Kor', 'Ulgrim'], discord: 'brick2v2', time: 'Noite', since: 'jun/2026', bio: 'Diamante no 2v2. Topo treinar com quem está chegando lá.' },
+  ];
+  const DEFAULT_ME = { nick: 'Jacob', elo: 1820, region: 'BRZ', legends: ['Hattori', 'Orion', 'Kor'], discord: 'jacob.bh', show: true, time: 'Noite', bio: 'Ex-competitivo, cheguei ao top 7 do Brasil. Voltando ao ranqueado 2v2 e procurando dupla fixa para jogar à noite.' };
+  let ME = Object.assign({}, DEFAULT_ME);
+  try { const saved = JSON.parse(store.get('duofinder:me') || 'null'); if (saved && saved.nick) ME = Object.assign({}, DEFAULT_ME, saved); } catch (e) { /* ignora */ }
+
+  // ---------- Regras ----------
+  // Iniciais: duas maiúsculas do nick (ThunderBR → TB) ou a primeira letra mais a primeira consoante (Jacob → JC)
+  function initials(n) {
+    const s = String(n).replace(/[^A-Za-zÀ-ÿ0-9]/g, '');
+    if (!s) return '??';
+    const caps = s.match(/[A-ZÀ-Ý]/g) || [];
+    if (caps.length >= 2) return (caps[0] + caps[1]).toUpperCase();
+    const rest = s.slice(1).match(/[^aeiouáéíóúâêôãõàAEIOUÁÉÍÓÚÂÊÔÃÕÀ0-9]/);
+    return (s[0] + (rest ? rest[0] : s[1] || '')).toUpperCase();
+  }
+  function tierOf(elo) {
+    const t = TIERS.find((x) => elo >= x.min && elo <= x.max) || TIERS[0];
+    let label = t.name;
+    if (t.key !== 'tin' && t.key !== 'diamante') {
+      const step = (t.max + 1 - t.min) / 5;
+      label += ' ' + Math.min(5, Math.floor((elo - t.min) / step) + 1);
+    }
+    return Object.assign({}, t, { label });
+  }
+  function compat(p) {
+    const diff = Math.abs(p.elo - ME.elo);
+    const shared = p.legends.filter((l) => ME.legends.includes(l)).length;
+    const c = 92 - diff * 0.1 + shared * 2 + (p.time === ME.time ? 2 : 0) - (p.region !== ME.region ? 8 : 0);
+    return Math.max(50, Math.min(99, Math.round(c)));
+  }
+  const fmtDiff = (d) => (d > 0 ? '+' + d : d < 0 ? '−' + Math.abs(d) : '±0');
+  const fmtNum = (n) => n.toLocaleString('pt-BR');
+
+  // ---------- Peças ----------
+  const avatar = (nick, size = '') => `<span class="avatar ${size}" aria-hidden="true">${esc(initials(nick))}</span>`;
+  const tierBadge = (elo) => { const t = tierOf(elo); return `<span class="tier ${t.key}">${t.label}</span>`; };
+  const legendTag = (l, i) => `<span class="ltag"><span class="portrait v${i % 3}">${esc(l[0])}</span>${esc(l)}</span>`;
+  function playerCard(p, opts = {}) {
+    const self = !!opts.self;
+    const d = p.elo - ME.elo;
+    const actions = self || opts.noActions ? '' : `<div class="pc-actions">
+        <button class="btn secondary" type="button" data-profile="${p.id}">${icon('eye')}Ver perfil</button>
+        ${p.discord ? `<button class="btn discord" type="button" data-discord="${p.id}">${icon('message')}Discord</button>` : `<button class="btn secondary" type="button" disabled title="Este jogador não informou Discord">Sem Discord</button>`}
+      </div>`;
+    return `<article class="pcard">
+      <div class="pc-head">${avatar(p.nick)}
+        <div class="pc-id"><h3>${esc(p.nick)}</h3><span>${icon('pin', 'xs')}${esc(p.region)}</span></div>
+        <div class="pc-compat">${self ? '<strong style="color:var(--blue-ink)">Você</strong><span>seu card</span>' : `<strong>${compat(p)}%</strong><span>compatível</span>`}</div>
+      </div>
+      <div class="pc-elo"><div><span class="label">Elo 2v2</span><b class="elo num">${p.elo}</b></div>
+        <div class="pc-tier">${tierBadge(p.elo)}<span class="label">${self ? 'Seu Elo' : fmtDiff(d) + ' de Elo'}</span></div></div>
+      <div class="pc-legends"><span class="label">Lendas favoritas</span><div class="tags">${p.legends.map(legendTag).join('') || '<span class="small muted">Nenhuma escolhida</span>'}</div></div>
+      ${actions}
+    </article>`;
+  }
+
+  // ---------- Navegação ----------
+  const ROUTES = ['inicio', 'login', 'cadastro', 'buscar', 'perfil', 'meu-perfil', 'dashboard'];
+  const LOGGED = ['buscar', 'perfil', 'meu-perfil', 'dashboard'];
+  let selected = 'zyphr';
+  const routeNow = () => { const h = location.hash.replace('#', ''); return ROUTES.includes(h) ? h : 'inicio'; };
+  function go(r) { if (routeNow() === r) render(); else location.hash = r; }
+
+  function renderTopbar(r) {
+    const bar = $('#topbar');
+    bar.hidden = r === 'login' || r === 'cadastro';
+    if (bar.hidden) return;
+    const logged = LOGGED.includes(r);
+    $('#top-logo').setAttribute('href', logged ? '#buscar' : '#inicio');
+    if (logged) {
+      const active = r === 'perfil' ? 'buscar' : r;
+      $('#nav').innerHTML = [['buscar', 'search', 'Buscar dupla'], ['dashboard', 'chart', 'Dashboard'], ['meu-perfil', 'user', 'Meu perfil']]
+        .map(([k, i, t]) => `<a href="#${k}"${k === active ? ' aria-current="page"' : ''}>${icon(i)}${t}</a>`).join('');
+      $('#top-actions').innerHTML = `<a class="userchip" href="#meu-perfil" aria-label="Meu perfil">${avatar(ME.nick, 'sm')}<span class="info"><b>${esc(ME.nick)}</b><span>${tierOf(ME.elo).label} · ${ME.elo}</span></span>${icon('chevron')}</a>`;
+    } else {
+      $('#nav').innerHTML = `<a href="#inicio" aria-current="page">${icon('home')}Início</a><button type="button" data-scroll="como-funciona">${icon('info')}Como funciona</button><button type="button" data-scroll="sobre">${icon('gamepad')}Sobre o projeto</button>`;
+      $('#top-actions').innerHTML = `<a class="btn ghost" href="#login">Entrar</a><a class="btn primary" href="#cadastro">Criar conta</a>`;
+    }
+  }
+
+  function render() {
+    const r = routeNow();
+    $('#modal').hidden = true;
+    $$('.screen').forEach((s) => s.classList.toggle('on', s.dataset.route === r));
+    renderTopbar(r);
+    $('#proto-screen').value = r;
+    if (r === 'login') $('#login-preview').innerHTML = playerCard(PLAYERS.find((p) => p.id === 'lunna'), { noActions: true });
+    if (r === 'buscar') renderBusca();
+    if (r === 'perfil') renderPerfil();
+    if (r === 'meu-perfil') loadMeuPerfil();
+    if (r === 'dashboard') renderDashboard();
+    window.scrollTo(0, 0);
+  }
+
+  // ---------- 04 Buscar ----------
+  const F = { range: 150, regions: new Set(['BRZ']), legends: new Set(), discordOnly: false, q: '', sort: 'compat' };
+  const RANGE_OPTS = [50, 100, 150, 250];
+  const FILTER_LEGENDS = ['Hattori', 'Orion', 'Kor', 'Val', 'Ember', 'Jhala', 'Ada', 'Teros', 'Koji'];
+  const chip = (label, on, attrs = '') => `<button type="button" class="chip" aria-pressed="${on}" ${attrs}>${icon('check', 'xs')}${esc(label)}</button>`;
+  function results() {
+    const q = F.q.trim().toLowerCase();
+    const list = PLAYERS.filter((p) => Math.abs(p.elo - ME.elo) <= F.range
+      && (F.regions.size === 0 || F.regions.has(p.region))
+      && (F.legends.size === 0 || p.legends.some((l) => F.legends.has(l)))
+      && (!F.discordOnly || p.discord)
+      && (!q || p.nick.toLowerCase().includes(q)));
+    const by = { compat: (a, b) => compat(b) - compat(a), diff: (a, b) => Math.abs(a.elo - ME.elo) - Math.abs(b.elo - ME.elo), elo: (a, b) => b.elo - a.elo };
+    return list.sort(by[F.sort]);
+  }
+  function renderBusca() {
+    $('#busca-sub').innerHTML = `Jogadores com Elo próximo ao seu. Você está em <b style="color:var(--ink)">${tierOf(ME.elo).label} · ${ME.elo}</b> de Elo.`;
+    const lo = ME.elo - F.range, hi = ME.elo + F.range, s0 = 1500, s1 = 2150;
+    const pct = (v) => Math.max(0, Math.min(100, (v - s0) / (s1 - s0) * 100));
+    $('#range-label').textContent = `${lo} – ${hi}`;
+    $('#range-mid').textContent = `±${F.range} do seu Elo`;
+    $('#rf').style.left = pct(lo) + '%'; $('#rf').style.width = (pct(hi) - pct(lo)) + '%';
+    $('#k1').style.left = pct(lo) + '%'; $('#k2').style.left = pct(hi) + '%'; $('#rme').style.left = pct(ME.elo) + '%';
+    $('#range-chips').innerHTML = RANGE_OPTS.map((v) => chip('±' + v, F.range === v, `data-range="${v}"`)).join('');
+    $('#region-chips').innerHTML = REGIONS.slice(0, 6).map((v) => chip(v, F.regions.has(v), `data-region="${v}"`)).join('');
+    $('#legend-chips').innerHTML = FILTER_LEGENDS.map((v) => chip(v, F.legends.has(v), `data-legend="${esc(v)}"`)).join('');
+    $('#legend-label').textContent = F.legends.size ? `${F.legends.size} selecionada${F.legends.size > 1 ? 's' : ''}` : 'Qualquer uma';
+    $('#discord-only').setAttribute('aria-checked', String(F.discordOnly));
+    const list = results();
+    $('#count').innerHTML = `<b style="color:var(--ink)">${list.length}</b> ${list.length === 1 ? 'jogador encontrado' : 'jogadores encontrados'}`;
+    const act = [`±${F.range} de Elo`].concat([...F.regions], [...F.legends], F.discordOnly ? ['Com Discord'] : []);
+    $('#active').innerHTML = act.map((a) => `<span class="chip" aria-pressed="true">${icon('check', 'xs')}${esc(a)}</span>`).join('');
+    $('#grid').innerHTML = list.length ? list.map((p) => playerCard(p)).join('') : `<div class="empty" style="grid-column:1/-1"><b class="h3">Nenhum jogador com esses filtros</b><p class="muted">Aumente a faixa de Elo ou escolha outra região.</p><button class="btn secondary" type="button" id="empty-clear">Limpar filtros</button></div>`;
+  }
+  function resetFilters() { F.range = 150; F.regions = new Set([ME.region]); F.legends = new Set(); F.discordOnly = false; F.q = ''; F.sort = 'compat'; $('#q').value = ''; $('#sort').value = 'compat'; renderBusca(); }
+
+  // ---------- 05 Perfil ----------
+  function renderPerfil() {
+    const p = PLAYERS.find((x) => x.id === selected) || PLAYERS[0];
+    const d = p.elo - ME.elo, range = F.range, lo = ME.elo - range, hi = ME.elo + range;
+    const pos = (v) => Math.max(0, Math.min(100, (v - lo) / (hi - lo) * 100));
+    const shared = p.legends.filter((l) => ME.legends.includes(l));
+    const crit = [
+      [Math.abs(d) <= range, Math.abs(d) <= range ? `Diferença de ${fmtDiff(d)} de Elo, dentro da sua faixa` : `Diferença de ${fmtDiff(d)} de Elo, fora da sua faixa de ±${range}`],
+      [p.region === ME.region, p.region === ME.region ? `Mesma região: ${p.region}` : `Região diferente: ${p.region}`],
+      [shared.length > 0, shared.length ? `${shared.length} Lenda${shared.length > 1 ? 's' : ''} em comum: ${shared.join(', ')}` : 'Nenhuma Lenda em comum'],
+      [p.time === ME.time, p.time === ME.time ? `Horário parecido: ${p.time.toLowerCase()}` : `Horário diferente: ${p.time.toLowerCase()}`],
+    ];
+    $('#perfil').innerHTML = `
+      <button class="back" type="button" data-go="buscar">${icon('left')}Voltar para a busca</button>
+      <div class="prof-head">
+        ${avatar(p.nick, 'lg')}
+        <div class="prof-info">
+          <div class="prof-name"><h1 class="h1">${esc(p.nick)}</h1>${tierBadge(p.elo)}</div>
+          <div class="meta"><span>${icon('pin')}${REGION_NAMES[p.region]}</span><span>${icon('clock')}Joga de ${p.time.toLowerCase()}</span><span>${icon('user')}No DuoFinder desde ${p.since}</span></div>
+          <p>${esc(p.bio)}</p>
+        </div>
+        <div class="prof-act">
+          <span class="big">${compat(p)}%</span><span class="small muted">de compatibilidade com você</span>
+          ${p.discord ? `<button class="btn discord lg" type="button" data-discord="${p.id}">${icon('message', '')}Chamar no Discord</button>` : `<button class="btn secondary lg" type="button" disabled>Sem Discord informado</button>`}
+        </div>
+      </div>
+      <div class="two">
+        <div class="card"><h2 class="h3">Informações competitivas</h2>
+          <div class="tiles">
+            <div class="tile"><span class="label">Elo atual (2v2)</span><b class="num">${p.elo}</b></div>
+            <div class="tile"><span class="label">Pico na temporada</span><b class="num">${p.peak}</b></div>
+            <div class="tile"><span class="label">Divisão</span><b>${tierOf(p.elo).label}</b></div>
+            <div class="tile"><span class="label">Região</span><b>${p.region}</b></div>
+          </div>
+        </div>
+        <div class="card"><h2 class="h3">Comparação com você</h2>
+          <div class="scale num"><span>${lo}</span><span>Sua faixa de busca (±${range})</span><span>${hi}</span></div>
+          <div class="cmp-scale" role="img" aria-label="Você com ${ME.elo} e ${esc(p.nick)} com ${p.elo} de Elo"><div class="rt"></div><span class="mk you" style="left:${pos(ME.elo)}%"></span><span class="mk them" style="left:${pos(p.elo)}%"></span></div>
+          <div class="legend-keys"><span><i style="background:var(--blue)"></i>Você · ${ME.elo}</span><span><i style="background:var(--gold)"></i>${esc(p.nick)} · ${p.elo}</span></div>
+          <hr class="divider">
+          <ul class="plain crit">${crit.map(([ok, t]) => `<li class="${ok ? 'yes' : 'no'}">${icon(ok ? 'check' : 'x')}${esc(t)}</li>`).join('')}</ul>
+        </div>
+      </div>
+      <div class="card"><h2 class="h3">Lendas favoritas</h2>
+        <div class="legend-cards">${p.legends.map((l, i) => `<div class="lcard"><span class="portrait v${i % 3}">${esc(l[0])}</span><div class="t"><div class="nm"><b class="h3">${esc(l)}</b>${i === 0 ? '<span class="pill gold">Main</span>' : ''}</div><span class="small muted">${WEAPONS[l] || ''}</span></div></div>`).join('')}</div>
+      </div>`;
+  }
+
+  // ---------- 06 Meu perfil ----------
+  let DRAFT = null;
+  const fillSelect = (el, opts, labels) => { el.innerHTML = opts.map((o) => `<option value="${esc(o)}">${esc(labels ? labels[o] : o)}</option>`).join(''); };
+  function loadMeuPerfil() {
+    DRAFT = JSON.parse(JSON.stringify(ME));
+    $('#mp-nick').value = DRAFT.nick; $('#mp-elo').value = DRAFT.elo; $('#mp-region').value = DRAFT.region;
+    $('#mp-discord').value = DRAFT.discord; $('#mp-time').value = DRAFT.time; $('#mp-bio').value = DRAFT.bio;
+    $('#mp-show').setAttribute('aria-checked', String(DRAFT.show));
+    updateMeuPerfil();
+  }
+  function updateMeuPerfil() {
+    $('#mp-avatar').textContent = initials(DRAFT.nick);
+    $('#mp-name').textContent = DRAFT.nick || 'Sem nickname';
+    $('#mp-tier').innerHTML = tierBadge(DRAFT.elo);
+    $('#mp-legends').innerHTML = LEGENDS.map((l) => chip(l, DRAFT.legends.includes(l), `data-mp-legend="${esc(l)}"`)).join('');
+    $('#mp-count').textContent = `${DRAFT.legends.length} de 3 selecionadas`;
+    $('#mp-bio-count').textContent = `${DRAFT.bio.length}/200`;
+    $('#mp-preview').innerHTML = playerCard({ id: 'me', nick: DRAFT.nick || '—', elo: DRAFT.elo, region: DRAFT.region, legends: DRAFT.legends, discord: DRAFT.show ? DRAFT.discord : null }, { self: true });
+  }
+
+  // ---------- 07 Dashboard ----------
+  const DIST = [['Tin', 'tin', '< 910', 96], ['Bronze', 'bronze', '910–1129', 212], ['Prata', 'prata', '1130–1389', 338], ['Ouro', 'ouro', '1390–1679', 301], ['Platina', 'platina', '1680–1999', 214], ['Diamante', 'diamante', '2000+', 87]];
+  const LEG = [['Hattori', 18], ['Orion', 14], ['Kor', 11], ['Val', 9], ['Ember', 8], ['Jhala', 7]];
+  const REG = [['BRZ', 802], ['US-E', 171], ['EU', 118], ['US-W', 79], ['Outras', 78]];
+  function renderDashboard() {
+    const max = 400, myTier = tierOf(ME.elo).key;
+    const ticks = [0, 100, 200, 300, 400];
+    $('#colchart').innerHTML = `
+      <div class="yaxis" aria-hidden="true">${ticks.map((t) => `<span style="top:${100 - t / max * 100}%">${t}</span>`).join('')}</div>
+      <div class="plot">
+        ${ticks.slice(1).map((t) => `<div class="gl" style="top:${100 - t / max * 100}%"></div>`).join('')}
+        <div class="cols">${DIST.map(([n, k, , v]) => { const h = v / max * 100; return `<div class="col${k === myTier ? ' hi' : ''}" tabindex="0" style="--h:${h}%" aria-label="${n}: ${v} jogadores"><span class="val">${v}</span><span class="bar" style="height:${h}%"></span><span class="tip">${n}: ${v} jogadores${k === myTier ? ' · sua divisão' : ''}</span></div>`; }).join('')}</div>
+      </div>
+      <div class="xlabels" aria-hidden="true">${DIST.map(([n, k, r]) => `<div><b class="${k === myTier ? 'hi' : ''}">${n}</b><span>${r}</span></div>`).join('')}</div>`;
+    $('#dist-table').innerHTML = `<table class="dt"><thead><tr><th>Divisão</th><th>Faixa de Elo</th><th class="r">Jogadores</th></tr></thead><tbody>${DIST.map(([n, , r, v]) => `<tr><td>${n}</td><td>${r}</td><td class="r">${v}</td></tr>`).join('')}<tr><td><b>Total</b></td><td></td><td class="r"><b>${fmtNum(DIST.reduce((a, x) => a + x[3], 0))}</b></td></tr></tbody></table>`;
+    $('#legend-bars').innerHTML = LEG.map(([n, v], i) => { const mine = ME.legends.includes(n); return `<div class="hrow${mine ? ' hi' : ''}" tabindex="0" aria-label="${n}: ${v}% dos jogadores"><span class="nm"><span class="portrait v${i % 3}">${n[0]}</span>${n}</span><span class="tr"><i style="width:${v / 20 * 100}%"></i></span><span class="vv">${v}%</span><span class="tip">${n}: ${v}% dos jogadores${mine ? ' · sua Lenda' : ''}</span></div>`; }).join('');
+    const top = REG[0][1];
+    const total = REG.reduce((a, x) => a + x[1], 0);
+    $('#region-bars').innerHTML = REG.map(([n, v]) => { const mine = n === ME.region; return `<div class="hrow${mine ? ' hi' : ''}" tabindex="0" aria-label="${n}: ${v} jogadores"><span class="nm">${n}</span><span class="tr"><i style="width:${v / top * 100}%"></i></span><span class="vv">${fmtNum(v)} · ${Math.round(v / total * 100)}%</span><span class="tip">${n}: ${fmtNum(v)} jogadores${mine ? ' · sua região' : ''}</span></div>`; }).join('');
+    const best = PLAYERS.slice().sort((a, b) => compat(b) - compat(a)).slice(0, 4);
+    $('#toplist').innerHTML = best.map((p) => `<li>${avatar(p.nick, 'sm')}<div class="t"><b>${esc(p.nick)}</b><span>${tierOf(p.elo).label} · ${p.elo} · ${p.region}</span></div><span class="c">${compat(p)}%</span><button class="btn secondary" type="button" data-profile="${p.id}">Ver</button></li>`).join('');
+  }
+
+  // ---------- Modal ----------
+  let lastFocus = null;
+  function openDiscord(id) {
+    const p = PLAYERS.find((x) => x.id === id);
+    if (!p || !p.discord) return;
+    lastFocus = document.activeElement;
+    $('#modal-title').textContent = `Chamar ${p.nick} no Discord`;
+    $('#modal-handle').textContent = p.discord;
+    $('#modal').hidden = false;
+    $('#copy').focus();
+  }
+  function closeModal() { $('#modal').hidden = true; if (lastFocus) lastFocus.focus(); }
+
+  // ---------- Toast ----------
+  let toastTimer = null;
+  function toast(msg) {
+    const t = $('#toast');
+    t.querySelector('span').textContent = msg;
+    t.hidden = false;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => { t.hidden = true; }, 2600);
+  }
+
+  // ---------- Banner ----------
+  function applyBanner(url) {
+    const img = $('#hero-img');
+    img.hidden = !url;
+    img.style.backgroundImage = url ? `url("${url}")` : '';
+    $('#hero-art').hidden = !!url;
+    $('#banner-clear').hidden = !url;
+  }
+  applyBanner(store.get('duofinder:banner'));
+  $('#banner-file').addEventListener('change', (e) => {
+    const f = e.target.files && e.target.files[0];
+    if (!f) return;
+    const rd = new FileReader();
+    rd.onload = () => {
+      applyBanner(rd.result);
+      const kept = store.set('duofinder:banner', rd.result);
+      toast(kept ? 'Banner aplicado' : 'Banner aplicado (imagem grande: não fica salva ao recarregar)');
+    };
+    rd.readAsDataURL(f);
+    e.target.value = '';
+  });
+  $('#banner-clear').addEventListener('click', () => { store.del('duofinder:banner'); applyBanner(null); toast('Voltou para a arte provisória'); });
+
+  // ---------- Formulários ----------
+  fillSelect($('#su-region'), REGIONS, REGION_NAMES);
+  fillSelect($('#mp-region'), REGIONS, REGION_NAMES);
+  fillSelect($('#su-time'), TIMES);
+  fillSelect($('#mp-time'), TIMES);
+  $('#su-time').value = 'Noite';
+  let SU_LEGENDS = ['Hattori', 'Orion', 'Kor'];
+  function renderSignupLegends() {
+    $('#su-legends').innerHTML = LEGENDS.map((l) => chip(l, SU_LEGENDS.includes(l), `data-su-legend="${esc(l)}"`)).join('');
+    $('#su-count').textContent = `${SU_LEGENDS.length} de 3 selecionadas`;
+  }
+  renderSignupLegends();
+  const toggle3 = (arr, l) => (arr.includes(l) ? arr.filter((x) => x !== l) : arr.length < 3 ? arr.concat(l) : (toast('Escolha no máximo 3 Lendas'), arr));
+
+  $('#login-form').addEventListener('submit', (e) => { e.preventDefault(); toast('Bem-vindo de volta, ' + ME.nick); go('buscar'); });
+  $('#forgot').addEventListener('click', () => toast('Enviaríamos um link de redefinição para o seu e-mail'));
+  $('#signup-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (!$('#su-terms').checked) { toast('Aceite os termos de uso para continuar'); return; }
+    const nick = $('#su-nick').value.trim() || ME.nick;
+    const elo = parseInt($('#su-elo').value, 10);
+    ME = Object.assign({}, ME, { nick, elo: isFinite(elo) ? Math.max(200, Math.min(3000, elo)) : ME.elo, region: $('#su-region').value, legends: SU_LEGENDS.slice(), discord: $('#su-discord').value.trim(), time: $('#su-time').value, show: $('#su-show').getAttribute('aria-checked') === 'true' });
+    F.regions = new Set([ME.region]);
+    toast('Conta criada. Estes são os jogadores no seu Elo');
+    go('buscar');
+  });
+  $('#mp-form').addEventListener('input', (e) => {
+    const id = e.target.id;
+    if (id === 'mp-nick') DRAFT.nick = e.target.value.trim();
+    if (id === 'mp-elo') { const v = parseInt(e.target.value, 10); if (isFinite(v)) DRAFT.elo = Math.max(200, Math.min(3000, v)); }
+    if (id === 'mp-discord') DRAFT.discord = e.target.value.trim();
+    if (id === 'mp-bio') DRAFT.bio = e.target.value;
+    updateMeuPerfil();
+  });
+  $('#mp-form').addEventListener('change', (e) => {
+    if (e.target.id === 'mp-region') DRAFT.region = e.target.value;
+    if (e.target.id === 'mp-time') DRAFT.time = e.target.value;
+    updateMeuPerfil();
+  });
+  $('#mp-save').addEventListener('click', () => {
+    if (!DRAFT.nick) { toast('O nickname não pode ficar vazio'); return; }
+    ME = JSON.parse(JSON.stringify(DRAFT));
+    store.set('duofinder:me', JSON.stringify(ME));
+    renderTopbar(routeNow());
+    toast('Alterações salvas');
+  });
+  $('#mp-cancel').addEventListener('click', () => { loadMeuPerfil(); toast('Alterações descartadas'); });
+
+  // ---------- Cliques ----------
+  document.addEventListener('click', (e) => {
+    const t = e.target.closest('button, a');
+    if (!t) { if (e.target === $('#modal')) closeModal(); return; }
+    if (t.matches('.switch')) { const on = t.getAttribute('aria-checked') !== 'true'; t.setAttribute('aria-checked', String(on)); if (t.id === 'discord-only') { F.discordOnly = on; renderBusca(); } if (t.id === 'mp-show') { DRAFT.show = on; updateMeuPerfil(); } return; }
+    if (t.dataset.profile) { selected = t.dataset.profile; go('perfil'); return; }
+    if (t.dataset.discord) { openDiscord(t.dataset.discord); return; }
+    if (t.dataset.go) { go(t.dataset.go); return; }
+    if (t.dataset.scroll) { const el = document.getElementById(t.dataset.scroll); if (el) el.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }); return; }
+    if (t.hasAttribute('data-close')) { closeModal(); return; }
+    if (t.dataset.range) { F.range = +t.dataset.range; renderBusca(); return; }
+    if (t.dataset.region) { const v = t.dataset.region; F.regions.has(v) ? F.regions.delete(v) : F.regions.add(v); renderBusca(); return; }
+    if (t.dataset.legend) { const v = t.dataset.legend; F.legends.has(v) ? F.legends.delete(v) : F.legends.add(v); renderBusca(); return; }
+    if (t.dataset.suLegend) { SU_LEGENDS = toggle3(SU_LEGENDS, t.dataset.suLegend); renderSignupLegends(); return; }
+    if (t.dataset.mpLegend) { DRAFT.legends = toggle3(DRAFT.legends, t.dataset.mpLegend); updateMeuPerfil(); return; }
+    if (t.id === 'clear' || t.id === 'empty-clear') { resetFilters(); return; }
+    if (t.id === 'copy') {
+      const h = $('#modal-handle').textContent;
+      const done = () => toast('Usuário copiado: ' + h);
+      const fallback = () => { const r = document.createRange(); r.selectNodeContents($('#modal-handle')); const s = getSelection(); s.removeAllRanges(); s.addRange(r); toast('Selecionado. Use Ctrl+C para copiar'); };
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(h).then(done, fallback); else fallback();
+      return;
+    }
+    if (t.classList.contains('pg') && !t.hasAttribute('aria-current')) { toast('As outras páginas não fazem parte do protótipo'); }
+  });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !$('#modal').hidden) closeModal(); });
+  $('#q').addEventListener('input', (e) => { F.q = e.target.value; renderBusca(); });
+  $('#sort').addEventListener('change', (e) => { F.sort = e.target.value; renderBusca(); });
+  $('#proto-screen').addEventListener('change', (e) => go(e.target.value));
+  window.addEventListener('hashchange', render);
+  render();
+})();
+</script>
+
+</html>

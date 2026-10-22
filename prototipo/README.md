@@ -33,8 +33,7 @@ O plano gratuito desses plugins costuma limitar o número de importações.
 
 **Opção 3: o plugin deste repositório.**
 A pasta `figma-plugin/` cria tudo direto no arquivo "Brawlhalla DuoFinder — Protótipo", com componentes e
-variáveis. Veja `figma-plugin/README.md`. Atenção: o plugin ainda aplica a identidade antiga (tema claro),
-não esta.
+variáveis, já com esta identidade e a arte das Lendas. Veja `figma-plugin/README.md`.
 
 ## Guia de estilo
 

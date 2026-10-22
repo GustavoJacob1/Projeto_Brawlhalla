@@ -7,6 +7,7 @@ A barrinha escura no canto inferior direito troca de tela direto.
 | Arquivo | O que é |
 |---|---|
 | `index.html` | Protótipo completo (7 telas + modal), funciona offline, exceto as fontes, que vêm do Google Fonts |
+| `banner-brawlhalla.webp` | Arte do banner da Home (precisa ficar na mesma pasta do `index.html`) |
 | `telas/01-inicio.png` … `telas/08-modal-discord.png` | Cada tela em 1440 px de largura, para usar no Figma |
 
 O que funciona no protótipo:
@@ -14,10 +15,8 @@ O que funciona no protótipo:
 - **Perfil do jogador:** cada card abre o perfil daquele jogador, com compatibilidade e comparação de Elo calculadas.
 - **Meu perfil:** editar nickname, Elo, região ou Lendas atualiza o card de pré-visualização na hora.
 - **Contato:** o botão Discord abre o modal com o usuário e um botão de copiar.
-- **Banner da Home:** use "Escolher imagem do banner" para colocar uma arte oficial com as Lendas
-  (por exemplo, a arte do jogo na página da Steam ou um wallpaper do site oficial).
-  A imagem fica salva só no seu navegador. Sem imagem, aparece uma arte provisória de céu com ilhas flutuantes.
-- **Tema:** o protótipo abre no tema escuro; o botão "Ver tema claro" alterna entre os dois.
+- **Banner da Home:** arte oficial do Brawlhalla com várias Lendas (`banner-brawlhalla.webp`).
+  O botão "Trocar imagem do banner" testa outra imagem. Ela fica salva só no seu navegador.
 
 Jogadores e números são fictícios.
 
@@ -34,33 +33,40 @@ O plano gratuito desses plugins costuma limitar o número de importações.
 
 **Opção 3: o plugin deste repositório.**
 A pasta `figma-plugin/` cria tudo direto no arquivo "Brawlhalla DuoFinder — Protótipo", com componentes e
-variáveis. Veja `figma-plugin/README.md`.
+variáveis. Veja `figma-plugin/README.md`. Atenção: o plugin ainda aplica a identidade antiga (tema claro),
+não esta.
 
 ## Guia de estilo
 
-### Cores (tema escuro, o principal)
+### Cores (inspiradas no Brawlhalla)
+
+O azul profundo vem do mundo do jogo, o ciano do brilho atrás do logo e o dourado do letreiro "BRAWLHALLA".
 
 | Nome | Hex | Uso |
 |---|---|---|
-| Azul noturno | `#111827` | Fundo das páginas |
-| Azul de card | `#1A2335` | Cards, barra de navegação, modal |
-| Azul de apoio | `#243049` | Áreas internas dos cards, chips |
-| Azul profundo | `#0B1120` | Painel do Login, faixa "Pronto para achar sua dupla?" |
-| Borda | `#2C3A55` | Bordas de cards e campos |
-| Cinza claro | `#E5E7EB` | Títulos e textos principais |
-| Texto secundário | `#C3CAD6` | Parágrafos |
-| Texto fraco | `#8E99AD` | Rótulos e legendas |
-| Azul competitivo | `#2563EB` | Botões principais, filtros selecionados, destaques dos gráficos |
-| Azul claro | `#7DB0FF` | Links e menu ativo (o azul competitivo fica fraco como texto no fundo escuro) |
-| Dourado | `#F4B942` | Logo, "Finder", avatares, botão da Home, ícones dos indicadores |
-| Verde | `#34D399` | Compatibilidade e confirmações |
+| Azul profundo | `#0A1A3A` | Fundo das páginas |
+| Azul de card | `#11264F` | Cards, barra de navegação, modal, seção "Como funciona" |
+| Azul de apoio | `#193466` | Áreas internas dos cards, avisos |
+| Azul escuro | `#071330` | Painel do Login, faixa "Pronto para achar sua dupla?" |
+| Borda | `#24447E` | Bordas de cards e campos |
+| Branco azulado | `#EAF2FF` | Títulos e textos principais |
+| Texto secundário | `#C2D4F0` | Parágrafos |
+| Texto fraco | `#8EA8D2` | Rótulos e legendas |
+| Ciano | `#38D9F5` | Menu ativo, filtros selecionados, interruptores, destaques dos gráficos |
+| Ciano claro | `#6BE3F8` | Links e sobretítulos |
+| Dourado | `#FFC83D` | Botões principais (texto `#0A1A3A`), logo, "Finder", avatares, ícones dos indicadores |
+| Verde | `#3DDC97` | Compatibilidade e confirmações |
 | Discord | `#5865F2` | Botões de contato |
 
 Divisões de Elo (texto da insígnia, fundo com 14% de opacidade):
-Tin `#A3AAB8` · Bronze `#E39A62` · Prata `#CBD5E1` · Ouro `#F4C542` · Platina `#4FE3C9` · Diamante `#A5B4FC`.
+Tin `#AAB4C8` · Bronze `#E8A06A` · Prata `#D4DEEC` · Ouro `#FFC83D` · Platina `#4FE3C9` · Diamante `#B4BEFF`.
 
-O botão "Ver tema claro", na barrinha do protótipo, mostra a versão clara
-(fundo `#E5E7EB`, cards brancos, texto `#111827`).
+### Banner da Home
+
+A arte (`banner-brawlhalla.webp`, 1080 × 607) ocupa a largura toda no topo da Home, sem cortar o logo.
+Na metade de baixo ela escurece até o azul profundo, e o título, os botões e o card "Dupla sugerida"
+começam a 60% da altura da arte. No Figma: frame de 1440, imagem de 1440 × 809 no topo e um degradê de
+transparente (46%) para `#0A1A3A` (100%) por cima dela.
 
 ### Tipografia
 

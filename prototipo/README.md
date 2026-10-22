@@ -14,8 +14,10 @@ O que funciona no protótipo:
 - **Perfil do jogador:** cada card abre o perfil daquele jogador, com compatibilidade e comparação de Elo calculadas.
 - **Meu perfil:** editar nickname, Elo, região ou Lendas atualiza o card de pré-visualização na hora.
 - **Contato:** o botão Discord abre o modal com o usuário e um botão de copiar.
-- **Banner da Home:** use "Escolher imagem do banner" para colocar uma arte oficial com as Lendas.
-  A imagem fica salva só no seu navegador.
+- **Banner da Home:** use "Escolher imagem do banner" para colocar uma arte oficial com as Lendas
+  (por exemplo, a arte do jogo na página da Steam ou um wallpaper do site oficial).
+  A imagem fica salva só no seu navegador. Sem imagem, aparece uma arte provisória de céu com ilhas flutuantes.
+- **Tema:** o protótipo abre no tema escuro; o botão "Ver tema claro" alterna entre os dois.
 
 Jogadores e números são fictícios.
 
@@ -36,25 +38,29 @@ variáveis. Veja `figma-plugin/README.md`.
 
 ## Guia de estilo
 
-### Cores
+### Cores (tema escuro, o principal)
 
 | Nome | Hex | Uso |
 |---|---|---|
-| Azul noturno | `#111827` | Textos principais, banner da Home, painel do Login, faixa "Pronto para achar sua dupla?" |
-| Azul competitivo | `#2563EB` | Botões principais, links, menu ativo, filtros selecionados, destaques dos gráficos |
-| Dourado | `#F4B942` | Logo, avatares, botão da Home, destaques em fundo escuro |
-| Cinza claro | `#E5E7EB` | Fundo das páginas |
-| Branco | `#FFFFFF` | Cards e barra de navegação |
-| Cinza de apoio | `#F3F4F6` | Áreas internas dos cards |
-| Borda | `#D6DAE1` | Bordas de cards e campos |
-| Texto secundário | `#374151` | Parágrafos |
-| Texto fraco | `#6B7280` | Rótulos e legendas |
-| Dourado escuro | `#A16207` | Dourado usado como texto ou ícone sobre fundo claro (o dourado normal fica ilegível no branco) |
-| Verde | `#15803D` | Compatibilidade e confirmações |
+| Azul noturno | `#111827` | Fundo das páginas |
+| Azul de card | `#1A2335` | Cards, barra de navegação, modal |
+| Azul de apoio | `#243049` | Áreas internas dos cards, chips |
+| Azul profundo | `#0B1120` | Painel do Login, faixa "Pronto para achar sua dupla?" |
+| Borda | `#2C3A55` | Bordas de cards e campos |
+| Cinza claro | `#E5E7EB` | Títulos e textos principais |
+| Texto secundário | `#C3CAD6` | Parágrafos |
+| Texto fraco | `#8E99AD` | Rótulos e legendas |
+| Azul competitivo | `#2563EB` | Botões principais, filtros selecionados, destaques dos gráficos |
+| Azul claro | `#7DB0FF` | Links e menu ativo (o azul competitivo fica fraco como texto no fundo escuro) |
+| Dourado | `#F4B942` | Logo, "Finder", avatares, botão da Home, ícones dos indicadores |
+| Verde | `#34D399` | Compatibilidade e confirmações |
 | Discord | `#5865F2` | Botões de contato |
 
-Divisões de Elo (texto da insígnia, fundo com 12% de opacidade):
-Tin `#6B7280` · Bronze `#B45309` · Prata `#64748B` · Ouro `#A16207` · Platina `#0F766E` · Diamante `#4F46E5`.
+Divisões de Elo (texto da insígnia, fundo com 14% de opacidade):
+Tin `#A3AAB8` · Bronze `#E39A62` · Prata `#CBD5E1` · Ouro `#F4C542` · Platina `#4FE3C9` · Diamante `#A5B4FC`.
+
+O botão "Ver tema claro", na barrinha do protótipo, mostra a versão clara
+(fundo `#E5E7EB`, cards brancos, texto `#111827`).
 
 ### Tipografia
 

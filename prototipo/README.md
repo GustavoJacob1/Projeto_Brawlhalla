@@ -58,6 +58,9 @@ O azul profundo vem do mundo do jogo, o ciano do brilho atrás do logo e o doura
 | Verde | `#3DDC97` | Compatibilidade e confirmações |
 | Discord | `#5865F2` | Botões de contato |
 
+A **tela de login** usa o visual claro da primeira versão: painel esquerdo `#111827`, formulário sobre
+`#E5E7EB` com campos `#F9FAFB`, botão "Entrar" e links em `#2563EB`.
+
 Divisões de Elo (texto da insígnia, fundo com 14% de opacidade):
 Tin `#AAB4C8` · Bronze `#E8A06A` · Prata `#D4DEEC` · Ouro `#FFC83D` · Platina `#4FE3C9` · Diamante `#B4BEFF`.
 

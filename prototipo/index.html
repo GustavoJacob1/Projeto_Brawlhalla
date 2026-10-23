@@ -60,41 +60,6 @@
   color-scheme: dark;
 }
 
-/* Tela de login: mantém o visual claro da primeira versão (só esta tela) */
-.screen[data-route="login"] {
-  --page: #E5E7EB;
-  --panel: #111827;
-  --surface: #FFFFFF;
-  --raised: #F3F4F6;
-  --field: #F9FAFB;
-  --line: #D6DAE1;
-  --line-strong: #AEB6C3;
-  --ink: #111827;
-  --ink-2: #374151;
-  --ink-3: #6B7280;
-  --accent: #2563EB;
-  --accent-ink: #1D4ED8;
-  --accent-soft: rgba(37, 99, 235, 0.10);
-  --cta: #2563EB;
-  --cta-hover: #1D4ED8;
-  --on-cta: #FFFFFF;
-  --gold: #F4B942;
-  --gold-ink: #A16207;
-  --gold-soft: rgba(244, 185, 66, 0.22);
-  --ok: #15803D;
-  --ok-soft: rgba(22, 163, 74, 0.12);
-  --t-platina: #0F766E; --t-platina-soft: rgba(15, 118, 110, 0.12);
-  --on-dark: #FFFFFF;
-  --on-dark-2: #D1D5DB;
-  background: var(--page);
-  color: var(--ink);
-  color-scheme: light;
-}
-.screen[data-route="login"] .link { color: #2563EB; }
-.screen[data-route="login"] .note.gold { background: var(--gold-soft); border: 0; }
-.screen[data-route="login"] .panel .deco { color: rgba(37, 99, 235, .22); }
-html:has(.screen.on[data-route="login"]), html:has(.screen.on[data-route="login"]) body { background: #E5E7EB; }
-
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
 html { background: var(--page); }

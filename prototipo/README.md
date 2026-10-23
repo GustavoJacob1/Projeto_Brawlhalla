@@ -7,7 +7,8 @@ A barrinha escura no canto inferior direito troca de tela direto.
 | Arquivo | O que é |
 |---|---|
 | `index.html` | Protótipo completo (7 telas + modal), funciona offline, exceto as fontes, que vêm do Google Fonts |
-| `banner-brawlhalla.webp` | Arte do banner da Home (precisa ficar na mesma pasta do `index.html`) |
+| `banner-brawlhalla-home.jpg` | Arte do banner da Home já estendida para baixo (precisa ficar na mesma pasta do `index.html`) |
+| `banner-brawlhalla.webp` | Arte original, sem extensão |
 | `telas/01-inicio.png` … `telas/08-modal-discord.png` | Cada tela em 1440 px de largura, para usar no Figma |
 
 O que funciona no protótipo:
@@ -15,7 +16,7 @@ O que funciona no protótipo:
 - **Perfil do jogador:** cada card abre o perfil daquele jogador, com compatibilidade e comparação de Elo calculadas.
 - **Meu perfil:** editar nickname, Elo, região ou Lendas atualiza o card de pré-visualização na hora.
 - **Contato:** o botão Discord abre o modal com o usuário e um botão de copiar.
-- **Banner da Home:** arte oficial do Brawlhalla com várias Lendas (`banner-brawlhalla.webp`).
+- **Banner da Home:** arte oficial do Brawlhalla com várias Lendas (`banner-brawlhalla-home.jpg`).
   O botão "Trocar imagem do banner" testa outra imagem. Ela fica salva só no seu navegador.
 
 Jogadores e números são fictícios.
@@ -62,10 +63,13 @@ Tin `#AAB4C8` · Bronze `#E8A06A` · Prata `#D4DEEC` · Ouro `#FFC83D` · Platin
 
 ### Banner da Home
 
-A arte (`banner-brawlhalla.webp`, 1080 × 607) ocupa a largura toda no topo da Home, sem cortar o logo.
-Na metade de baixo ela escurece até o azul profundo, e o título, os botões e o card "Dupla sugerida"
-começam a 60% da altura da arte. No Figma: frame de 1440, imagem de 1440 × 809 no topo e um degradê de
-transparente (46%) para `#0A1A3A` (100%) por cima dela.
+A arte original (1080 × 607) foi estendida para 1080 × 900: a parte de baixo dos personagens vai
+ganhando desfoque e continua num reflexo bem desfocado, para a cor do wallpaper ir até o fim da seção
+sem deixar uma faixa escura. O escurecimento que deixa o texto legível já vem na própria imagem e
+termina em `#1E314F`, que é a cor de fundo da seção.
+
+No Figma: imagem de 1440 × 1200 no topo do frame da Home (sem degradê por cima) e fundo da seção em
+`#1E314F`. O título, os botões e o card "Dupla sugerida" começam a 486 px do topo da seção.
 
 ### Tipografia
 

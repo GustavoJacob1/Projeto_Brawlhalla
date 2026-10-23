@@ -54,8 +54,9 @@
   /* Calhas */
   --gutter-l: max(clamp(16px, 3.4vw, 48px), env(safe-area-inset-left, 0px));
   --gutter-r: max(clamp(16px, 3.4vw, 48px), env(safe-area-inset-right, 0px));
-  /* Altura da arte do banner (proporção 1080 x 607) */
-  --art-h: calc(100vw * 607 / 1080);
+  /* Arte do banner estendida para baixo (proporção 1080 x 900); a última faixa dela é --hero-end */
+  --art-h: calc(100vw * 900 / 1080);
+  --hero-end: #1E314F;
   color-scheme: dark;
 }
 
@@ -182,10 +183,11 @@ textarea.area:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--a
 .screen.on { display: block; }
 
 /* ---------- 01 Início ---------- */
-.hero { position: relative; overflow: hidden; background: var(--night); color: var(--on-dark); isolation: isolate; }
-.hero-img { position: absolute; left: 0; right: 0; top: 0; height: var(--art-h); z-index: -1; background: var(--night) url("banner-brawlhalla.webp") center top / cover no-repeat; }
-.hero-img::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(10, 26, 58, .18) 0%, rgba(10, 26, 58, 0) 14%, rgba(10, 26, 58, 0) 46%, rgba(10, 26, 58, .78) 66%, rgba(10, 26, 58, .97) 84%, #0A1A3A 100%); }
-.hero .wrap { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, .9fr); gap: 64px; align-items: end; padding-top: min(calc(var(--art-h) * .6), 620px); padding-bottom: 96px; }
+.hero { position: relative; overflow: hidden; background: var(--hero-end); color: var(--on-dark); isolation: isolate; }
+.hero-img { position: absolute; left: 0; right: 0; top: 0; height: var(--art-h); z-index: -1; background: var(--hero-end) url("banner-brawlhalla-home.jpg") center top / 100% auto no-repeat; }
+.hero-img.custom { height: calc(var(--art-h) * 607 / 900); background-size: cover; }
+.hero-img.custom::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(10, 26, 58, .18) 0%, rgba(10, 26, 58, 0) 14%, rgba(10, 26, 58, 0) 46%, rgba(30, 49, 79, .82) 72%, var(--hero-end) 100%); }
+.hero .wrap { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, .9fr); gap: 64px; align-items: end; padding-top: min(calc(var(--art-h) * .405), 720px); padding-bottom: 96px; }
 .hero .display, .hero .lead { text-shadow: 0 2px 16px rgba(4, 10, 26, .6); }
 .hero-copy { display: flex; flex-direction: column; gap: 28px; min-width: 0; }
 .eyebrow { align-self: flex-start; display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px 6px 10px; border-radius: 999px; background: rgba(255, 200, 61, .18); color: var(--gold); font: 600 12px/16px var(--body); border: 1px solid rgba(255, 200, 61, .45); }
@@ -1115,6 +1117,7 @@ table.dt td.r, table.dt th.r { text-align: right; }
   // ---------- Banner ----------
   function applyBanner(url) {
     $('#hero-img').style.backgroundImage = url ? `url("${url}")` : '';
+    $('#hero-img').classList.toggle('custom', !!url);
     $('#banner-clear').hidden = !url;
   }
   applyBanner(store.get('duofinder:banner'));

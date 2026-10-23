@@ -1,6 +1,6 @@
 {
-  "name": "DuoFinder — Atualizar protótipo",
-  "id": "duofinder-completar-prototipo",
+  "name": "DuoFinder — Protótipo Brawlhalla (v4)",
+  "id": "duofinder-prototipo-brawlhalla-v4",
   "api": "1.0.0",
   "main": "code.js",
   "editorType": ["figma"],

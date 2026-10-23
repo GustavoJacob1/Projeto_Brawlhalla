@@ -24,21 +24,28 @@ protótipo web (`prototipo/`):
 
 ## Como rodar
 
-1. Instale e abra o **Figma Desktop**: plugins em desenvolvimento só rodam no app.
-2. Abra o arquivo **"Brawlhalla DuoFinder — Protótipo"** (está nos seus Rascunhos/Drafts).
-3. No menu, vá em **Plugins → Desenvolvimento → Importar plugin do manifesto…**
-   (em inglês: *Plugins → Development → Import plugin from manifest…*) e escolha o
-   arquivo `manifest.json` desta pasta. Se você já importou uma versão anterior, não precisa importar
-   de novo: o Figma lê o `code.js` atualizado.
-4. Rode em **Plugins → Desenvolvimento → DuoFinder — Atualizar protótipo**. Não abre janela: ele
-   trabalha sozinho e leva alguns segundos.
-5. Espere a mensagem final, que começa com `✅ DuoFinder: identidade do Brawlhalla aplicada`.
+1. No terminal, dentro da pasta do projeto, atualize: `git pull origin main`.
+2. Abra o **Figma Desktop** (plugins em desenvolvimento só rodam no app) e o arquivo
+   **"Brawlhalla DuoFinder — Protótipo"**.
+3. Vá em **Plugins → Desenvolvimento → Importar plugin do manifesto…**
+   (em inglês: *Plugins → Development → Import plugin from manifest…*) e escolha o `manifest.json`
+   **desta pasta** (`Projeto_Brawlhalla/figma-plugin/manifest.json`).
+   O nome do plugin mudou para **"DuoFinder — Protótipo Brawlhalla (v4)"**, então importe de novo mesmo
+   que já tenha importado uma versão anterior.
+4. Rode **Plugins → Desenvolvimento → DuoFinder — Protótipo Brawlhalla (v4)**. Ele trabalha sozinho por
+   alguns segundos.
+5. Confira a mensagem final: ela precisa começar com **`✅ DuoFinder v4:`**. Se aparecer outro texto
+   (por exemplo "Atualizar protótipo" ou sem "v4"), o Figma está rodando uma cópia antiga do plugin.
 
 Para navegar, selecione a tela **01 · Início** e clique em **▶ Apresentar** (*Present*).
 
 ## Bom saber
 
-- Pode rodar quantas vezes quiser: telas prontas são mantidas, telas que ficaram pela metade são refeitas e nada é duplicado.
+- As telas **04 a 08 e a capa são apagadas e refeitas a cada execução**, para ficarem iguais ao protótipo.
+  Se você editar alguma delas à mão, a edição some quando rodar o plugin de novo.
+- As telas 01, 02 e 03 não são apagadas: o plugin só atualiza as cores e a arte da Home.
+- As versões antigas ("DuoFinder — Completar protótipo" e "DuoFinder — Atualizar protótipo") podem ser removidas em
+  **Plugins → Desenvolvimento → Gerenciar plugins em desenvolvimento**, para não confundir.
 - Para trocar a arte da Home, selecione a camada **Banner Brawlhalla** (dentro de *01 · Início → Hero*) e troque a imagem do preenchimento.
 - Se a mensagem final falar em "falhou" ou "aviso", abra **Plugins → Desenvolvimento → Mostrar/ocultar console** para ver o detalhe.
 - O plugin só funciona nesse arquivo, porque usa os componentes que já estão nele.
